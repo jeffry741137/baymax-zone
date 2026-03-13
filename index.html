@@ -399,6 +399,19 @@ body.svc-disney .email-chip { background: var(--disney-soft); color: var(--disne
       <div class="success-sub">Hemos recibido tu solicitud para <strong id="successService"></strong>. Te contactaremos a:</div>
       <div class="email-chip">✉️ <span id="successEmail"></span></div>
       <div class="success-note">
+        <div id="codeBox" style="
+margin-top:15px;
+padding:18px;
+background:white;
+border-radius:14px;
+font-size:22px;
+font-weight:800;
+letter-spacing:3px;
+border:2px dashed #4361ee;
+text-align:center;
+color:#4361ee;">
+Cargando código...
+</div>
         📬 <strong>Revisa tu bandeja de entrada</strong> en los próximos minutos.<br>
         Si no llega, revisa la carpeta de <strong>spam o correo no deseado</strong>.
       </div>
@@ -433,6 +446,24 @@ body.svc-disney .email-chip { background: var(--disney-soft); color: var(--disne
   // ================================
 
   let currentService = null;
+  function generarCodigo() {
+  const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const numeros = "23456789";
+
+  function random(str){
+    return str[Math.floor(Math.random()*str.length)];
+  }
+
+  let codigo = "";
+
+  for(let i=0;i<4;i++) codigo += random(letras);
+  codigo += "-";
+  for(let i=0;i<4;i++) codigo += random(numeros);
+  codigo += "-";
+  for(let i=0;i<4;i++) codigo += random(letras);
+
+  return codigo;
+}
 
   function selectService(svc) {
     currentService = svc;
@@ -492,6 +523,9 @@ body.svc-disney .email-chip { background: var(--disney-soft); color: var(--disne
     document.getElementById('sn2').className='step-num done'; document.getElementById('sn2').textContent='✓';
     document.getElementById('sn3').className='step-num done'; document.getElementById('sn3').textContent='✓';
     document.getElementById('sl3').className='step-label active';
+    
+    const codigo = generarCodigo();
+document.getElementById("codeBox").textContent = codigo;
   }
 
   function showError(msg) {
