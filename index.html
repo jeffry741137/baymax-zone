@@ -546,14 +546,16 @@ function pickSvc(svc) {
     document.getElementById("cN").classList.add("sel");
     document.getElementById("nsub").classList.add("show"); 
     hide(['fdiv','frow','btnGo']); 
-    window.svc = "nh"; // o "nl" después de elegir tipo, pero aquí marcamos Netflix
+    window.svc = "netflix";   // importante: marcar que es Netflix
   } else if (svc === "d") {
     // activar Disney
     document.getElementById("cD").classList.add("sel");
     show(['fdiv','frow','btnGo']); 
     setTimeout(() => document.getElementById("emailIn").focus(), 350);
-    window.svc = "disney"; // <-- importante: marcar Disney
+    window.svc = "disney";    // marcar que es Disney
   }
+}
+
   setStep(2);
 }
 function pickNT(t){
