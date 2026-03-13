@@ -36,7 +36,8 @@ html{scroll-behavior:smooth;}
 body{
   background:var(--bg);color:var(--text);
   font-family:'Plus Jakarta Sans',sans-serif;
-  min-height:100vh;overflow-x:hidden;
+  min-height:100vh;
+  overflow-x:hidden; /* ← prevents horizontal scroll */
   -webkit-font-smoothing:antialiased;
 }
 
@@ -60,11 +61,13 @@ body{
 }
 
 /* ═══════════════════════════════════════
-   LAYOUT
+   LAYOUT  — KEY FIX: overflow-x hidden
 ═══════════════════════════════════════ */
 .page{
   position:relative;z-index:1;
   min-height:100vh;
+  width:100%;          /* ← ensure full width */
+  overflow-x:hidden;   /* ← prevent card from pushing page sideways */
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   padding:56px 20px 50px;
@@ -190,6 +193,8 @@ body{
 .card-wrap{
   width:100%;max-width:540px;
   position:relative;
+  border-radius:30px;
+  overflow:hidden;          /* CRITICAL: clip the rotating card-glow */
   animation:slideUp 1s .15s cubic-bezier(.22,1,.36,1) both;
 }
 
@@ -288,7 +293,7 @@ body.sd .cico{background:rgba(26,112,255,.1);border-color:rgba(26,112,255,.22);}
 /* ═══════════════════════════════════════
    SERVICE CARDS
 ═══════════════════════════════════════ */
-.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;contain:layout;}
 
 .svc{
   position:relative;
@@ -324,13 +329,8 @@ body.sd .cico{background:rgba(26,112,255,.1);border-color:rgba(26,112,255,.22);}
   box-shadow:0 10px 45px var(--nglow), 0 0 0 1px rgba(232,9,26,.1) inset;
 }
 .svc-n.sel::before{opacity:1;}
-.svc-n.sel{
-  transform:translateY(-5px);
-}
+.svc-n.sel{transform:translateY(-5px) scale(1.03);}
 
-.svc-d.sel{
-  transform:translateY(-5px);
-}
 /* Disney */
 .svc-d::before{background:radial-gradient(ellipse at 50% 0%,rgba(26,112,255,.14),transparent 65%);}
 .svc-d:hover,.svc-d.sel{
@@ -382,8 +382,22 @@ body.sd .cico{background:rgba(26,112,255,.1);border-color:rgba(26,112,255,.22);}
 /* ═══════════════════════════════════════
    NETFLIX SUBTYPE
 ═══════════════════════════════════════ */
-.nsub{display:none;margin-top:18px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;}
-.nsub.show{opacity:1;transform:translateY(0);display:block;}
+/* KEY FIX: use max-height transition instead of display:none toggle
+   so the element never causes layout shift that pushes content off-screen */
+.nsub{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(8px);
+  transition:max-height .45s ease, opacity .4s ease, transform .4s ease;
+  margin-top:0;
+}
+.nsub.show{
+  max-height:300px;   /* large enough to fit content */
+  opacity:1;
+  transform:translateY(0);
+  margin-top:18px;
+}
 
 .nsub-head{
   font-size:10px;font-weight:700;color:var(--nred2);
@@ -704,12 +718,8 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
       <div class="bx-halo bx-halo1"></div>
       <div class="bx-plat"></div>
 
-      <!-- ════════════════════════════════════
-           BAYMAX SVG — Ultra Detailed
-      ════════════════════════════════════ -->
       <svg class="bx-svg" viewBox="0 0 150 160" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Main body gradient - white robot with blue tint -->
           <radialGradient id="G_body" cx="38%" cy="25%" r="72%">
             <stop offset="0%"   stop-color="#ffffff"/>
             <stop offset="45%"  stop-color="#edf2ff"/>
@@ -730,25 +740,21 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
             <stop offset="0%"   stop-color="#edf2ff"/>
             <stop offset="100%" stop-color="#c0d0ec"/>
           </radialGradient>
-          <!-- Eye iris glow -->
           <radialGradient id="G_eye" cx="50%" cy="45%" r="55%">
             <stop offset="0%"   stop-color="#90c8ff"/>
             <stop offset="40%"  stop-color="#4a8fff"/>
             <stop offset="80%"  stop-color="#1a4fd0"/>
             <stop offset="100%" stop-color="#0d2e90"/>
           </radialGradient>
-          <!-- Eye outer rim -->
           <radialGradient id="G_erim" cx="50%" cy="30%" r="60%">
             <stop offset="0%"  stop-color="#2a60e0" stop-opacity=".5"/>
             <stop offset="100%" stop-color="transparent"/>
           </radialGradient>
-          <!-- Chest line gradient -->
           <linearGradient id="G_chest" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%"   stop-color="rgba(140,180,240,0.55)"/>
             <stop offset="60%"  stop-color="rgba(140,180,240,0.2)"/>
             <stop offset="100%" stop-color="rgba(140,180,240,0)"/>
           </linearGradient>
-          <!-- Soft shadow filter -->
           <filter id="F_shadow" x="-25%" y="-20%" width="150%" height="150%">
             <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="rgba(0,0,80,.35)"/>
           </filter>
@@ -759,197 +765,78 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
             <feGaussianBlur stdDeviation="2.5" result="blur"/>
             <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
-          <!-- Highlight gradient for top of head/body -->
           <radialGradient id="G_hl" cx="45%" cy="10%" r="55%">
             <stop offset="0%"  stop-color="rgba(255,255,255,0.75)"/>
             <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
           </radialGradient>
         </defs>
-
-        <!-- ── Ground shadow ── -->
         <ellipse cx="75" cy="156" rx="34" ry="5.5" fill="rgba(0,0,60,.28)"/>
-
-        <!-- ══ LEFT ARM ══ -->
-        <!-- Upper arm -->
-        <ellipse cx="15" cy="88" rx="13" ry="22"
-          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
-          transform="rotate(-10,15,88)"/>
-        <!-- Arm highlight -->
-        <ellipse cx="12" cy="80" rx="4" ry="8"
-          fill="rgba(255,255,255,0.52)"
-          transform="rotate(-10,12,80)"/>
-        <!-- Arm side shadow -->
-        <ellipse cx="18" cy="96" rx="5" ry="10"
-          fill="rgba(180,205,240,0.25)"
-          transform="rotate(-10,18,96)"/>
-        <!-- Wrist detail -->
-        <ellipse cx="14" cy="107" rx="9" ry="5"
-          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
-          transform="rotate(-10,14,107)"/>
-
-        <!-- ══ RIGHT ARM ══ -->
-        <ellipse cx="135" cy="88" rx="13" ry="22"
-          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
-          transform="rotate(10,135,88)"/>
-        <ellipse cx="132" cy="80" rx="4" ry="8"
-          fill="rgba(255,255,255,0.52)"
-          transform="rotate(10,132,80)"/>
-        <ellipse cx="138" cy="96" rx="5" ry="10"
-          fill="rgba(180,205,240,0.25)"
-          transform="rotate(10,138,96)"/>
-        <ellipse cx="136" cy="107" rx="9" ry="5"
-          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
-          transform="rotate(10,136,107)"/>
-
-        <!-- ══ BODY ══ -->
-        <!-- Main body pill -->
-        <rect x="28" y="62" width="94" height="76" rx="34"
-          fill="url(#G_body)" filter="url(#F_shadow)"/>
-        <!-- Bottom cap -->
+        <ellipse cx="15" cy="88" rx="13" ry="22" fill="url(#G_arm)" filter="url(#F_shadow_sm)" transform="rotate(-10,15,88)"/>
+        <ellipse cx="12" cy="80" rx="4" ry="8" fill="rgba(255,255,255,0.52)" transform="rotate(-10,12,80)"/>
+        <ellipse cx="18" cy="96" rx="5" ry="10" fill="rgba(180,205,240,0.25)" transform="rotate(-10,18,96)"/>
+        <ellipse cx="14" cy="107" rx="9" ry="5" fill="url(#G_arm)" filter="url(#F_shadow_sm)" transform="rotate(-10,14,107)"/>
+        <ellipse cx="135" cy="88" rx="13" ry="22" fill="url(#G_arm)" filter="url(#F_shadow_sm)" transform="rotate(10,135,88)"/>
+        <ellipse cx="132" cy="80" rx="4" ry="8" fill="rgba(255,255,255,0.52)" transform="rotate(10,132,80)"/>
+        <ellipse cx="138" cy="96" rx="5" ry="10" fill="rgba(180,205,240,0.25)" transform="rotate(10,138,96)"/>
+        <ellipse cx="136" cy="107" rx="9" ry="5" fill="url(#G_arm)" filter="url(#F_shadow_sm)" transform="rotate(10,136,107)"/>
+        <rect x="28" y="62" width="94" height="76" rx="34" fill="url(#G_body)" filter="url(#F_shadow)"/>
         <rect x="28" y="108" width="94" height="30" rx="0" fill="url(#G_body)"/>
         <rect x="28" y="118" width="94" height="20" rx="22" fill="url(#G_body)"/>
-        <!-- Body top highlight -->
         <ellipse cx="75" cy="70" rx="36" ry="14" fill="url(#G_hl)"/>
-        <!-- Body left shadow -->
-        <rect x="28" y="62" width="20" height="76" rx="34"
-          fill="rgba(175,200,240,.18)"/>
-        <!-- Body right shadow -->
-        <rect x="102" y="62" width="20" height="76" rx="34"
-          fill="rgba(175,200,240,.15)"/>
-        <!-- Body bottom shadow line -->
+        <rect x="28" y="62" width="20" height="76" rx="34" fill="rgba(175,200,240,.18)"/>
+        <rect x="102" y="62" width="20" height="76" rx="34" fill="rgba(175,200,240,.15)"/>
         <ellipse cx="75" cy="136" rx="42" ry="5" fill="rgba(170,195,235,.2)"/>
-
-        <!-- Chest center ridge -->
         <rect x="72" y="73" width="6" height="55" rx="3" fill="url(#G_chest)"/>
-
-        <!-- ── Belly sensor ── -->
         <circle cx="75" cy="98" r="8" fill="rgba(150,185,240,.18)" stroke="rgba(120,165,235,.35)" stroke-width="1.5"/>
         <circle cx="75" cy="98" r="5" fill="rgba(74,143,255,.28)" stroke="rgba(100,160,255,.4)" stroke-width="1"/>
         <circle cx="75" cy="98" r="2.5" fill="rgba(126,184,255,.85)"/>
         <circle cx="75" cy="98" r="1" fill="rgba(200,230,255,.9)"/>
-
-        <!-- ══ NECK ══ -->
-        <rect x="57" y="76" width="36" height="12" rx="6"
-          fill="url(#G_body)"/>
-        <!-- Neck highlight -->
-        <rect x="60" y="77" width="30" height="5" rx="2.5"
-          fill="rgba(255,255,255,.35)"/>
-        <!-- Neck shadow -->
-        <rect x="57" y="83" width="36" height="5" rx="0"
-          fill="rgba(170,195,240,.18)"/>
-
-        <!-- ══ HEAD ══ -->
-        <ellipse cx="75" cy="46" rx="39" ry="38"
-          fill="url(#G_head)" filter="url(#F_shadow)"/>
-        <!-- Head top highlight dome -->
+        <rect x="57" y="76" width="36" height="12" rx="6" fill="url(#G_body)"/>
+        <rect x="60" y="77" width="30" height="5" rx="2.5" fill="rgba(255,255,255,.35)"/>
+        <rect x="57" y="83" width="36" height="5" rx="0" fill="rgba(170,195,240,.18)"/>
+        <ellipse cx="75" cy="46" rx="39" ry="38" fill="url(#G_head)" filter="url(#F_shadow)"/>
         <ellipse cx="68" cy="22" rx="22" ry="14" fill="url(#G_hl)"/>
-        <!-- Head left shading -->
         <ellipse cx="44" cy="46" rx="12" ry="32" fill="rgba(180,205,240,.2)"/>
-        <!-- Head right shading -->
         <ellipse cx="106" cy="46" rx="12" ry="32" fill="rgba(180,205,240,.17)"/>
-        <!-- Head bottom shadow -->
         <ellipse cx="75" cy="80" rx="35" ry="7" fill="rgba(170,195,235,.22)"/>
-
-        <!-- ══ EYE SOCKETS ══ -->
-        <!-- Left socket -->
-        <rect x="30" y="36" width="33" height="22" rx="11"
-          fill="#101628" rx="11"/>
-        <rect x="30" y="36" width="33" height="22" rx="11"
-          fill="rgba(5,10,40,.9)"/>
-        <!-- Right socket -->
-        <rect x="87" y="36" width="33" height="22" rx="11"
-          fill="#101628"/>
-        <rect x="87" y="36" width="33" height="22" rx="11"
-          fill="rgba(5,10,40,.9)"/>
-
-        <!-- Socket edge highlight top -->
-        <rect x="30" y="36" width="33" height="3" rx="1.5"
-          fill="rgba(255,255,255,.09)"/>
-        <rect x="87" y="36" width="33" height="3" rx="1.5"
-          fill="rgba(255,255,255,.09)"/>
-        <!-- Socket inner glow -->
-        <rect x="31" y="37" width="31" height="20" rx="10"
-          fill="url(#G_erim)" opacity=".45"/>
-        <rect x="88" y="37" width="31" height="20" rx="10"
-          fill="url(#G_erim)" opacity=".45"/>
-
-        <!-- ══ IRISES ══ -->
-        <!-- Left iris base -->
-        <ellipse cx="46.5" cy="47" rx="11.5" ry="8"
-          fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
-        <!-- Left iris depth -->
+        <rect x="30" y="36" width="33" height="22" rx="11" fill="#101628" />
+        <rect x="30" y="36" width="33" height="22" rx="11" fill="rgba(5,10,40,.9)"/>
+        <rect x="87" y="36" width="33" height="22" rx="11" fill="#101628"/>
+        <rect x="87" y="36" width="33" height="22" rx="11" fill="rgba(5,10,40,.9)"/>
+        <rect x="30" y="36" width="33" height="3" rx="1.5" fill="rgba(255,255,255,.09)"/>
+        <rect x="87" y="36" width="33" height="3" rx="1.5" fill="rgba(255,255,255,.09)"/>
+        <rect x="31" y="37" width="31" height="20" rx="10" fill="url(#G_erim)" opacity=".45"/>
+        <rect x="88" y="37" width="31" height="20" rx="10" fill="url(#G_erim)" opacity=".45"/>
+        <ellipse cx="46.5" cy="47" rx="11.5" ry="8" fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
         <ellipse cx="46.5" cy="47" rx="8" ry="5.5" fill="#1a4fd0"/>
         <ellipse cx="46.5" cy="47" rx="5"   ry="3.5" fill="#0e2e90"/>
-        <!-- Left iris glow layer -->
-        <ellipse cx="46.5" cy="47" rx="11.5" ry="8"
-          fill="rgba(74,143,255,.35)"/>
-        <!-- Left iris rim light -->
-        <ellipse cx="46.5" cy="39.5" rx="10" ry="3"
-          fill="rgba(126,184,255,.3)"/>
-
-        <!-- Right iris base -->
-        <ellipse cx="103.5" cy="47" rx="11.5" ry="8"
-          fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
+        <ellipse cx="46.5" cy="47" rx="11.5" ry="8" fill="rgba(74,143,255,.35)"/>
+        <ellipse cx="46.5" cy="39.5" rx="10" ry="3" fill="rgba(126,184,255,.3)"/>
+        <ellipse cx="103.5" cy="47" rx="11.5" ry="8" fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
         <ellipse cx="103.5" cy="47" rx="8"   ry="5.5" fill="#1a4fd0"/>
         <ellipse cx="103.5" cy="47" rx="5"   ry="3.5" fill="#0e2e90"/>
-        <ellipse cx="103.5" cy="47" rx="11.5" ry="8"
-          fill="rgba(74,143,255,.35)"/>
-        <ellipse cx="103.5" cy="39.5" rx="10" ry="3"
-          fill="rgba(126,184,255,.3)"/>
-
-        <!-- ── Specular highlights (eye shine) ── -->
-        <!-- Left eye: large shine -->
+        <ellipse cx="103.5" cy="47" rx="11.5" ry="8" fill="rgba(74,143,255,.35)"/>
+        <ellipse cx="103.5" cy="39.5" rx="10" ry="3" fill="rgba(126,184,255,.3)"/>
         <circle cx="52" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
-        <!-- Left eye: small secondary -->
         <circle cx="56" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
-        <!-- Left eye: tiny tertiary -->
         <circle cx="41" cy="44" r="1.2" fill="rgba(200,225,255,.5)"/>
-        <!-- Right eye: large shine -->
         <circle cx="109" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
         <circle cx="113" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
         <circle cx="98"  cy="44" r="1.2" fill="rgba(200,225,255,.5)"/>
-
-        <!-- ── Eye socket edge glow (blue LED feel) ── -->
-        <rect x="30" y="55" width="33" height="3" rx="1.5"
-          fill="rgba(74,143,255,.2)"/>
-        <rect x="87" y="55" width="33" height="3" rx="1.5"
-          fill="rgba(74,143,255,.2)"/>
-
-        <!-- ══ MOUTH ══ -->
-        <!-- Mouth line soft -->
-        <path d="M 57 65 Q 75 71 93 65"
-          stroke="rgba(140,175,230,.55)" stroke-width="2"
-          stroke-linecap="round" fill="none"/>
-        <!-- Mouth slight smile shadow -->
-        <path d="M 60 66 Q 75 70 90 66"
-          stroke="rgba(200,220,250,.2)" stroke-width="1"
-          stroke-linecap="round" fill="none"/>
-
-        <!-- ══ LEGS ══ -->
-        <!-- Left leg -->
-        <rect x="42" y="128" width="24" height="24" rx="12"
-          fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
-        <ellipse cx="54" cy="130" rx="9" ry="4.5"
-          fill="rgba(255,255,255,.42)"/>
-        <!-- Left leg shadow -->
-        <ellipse cx="54" cy="150" rx="10" ry="3"
-          fill="rgba(170,195,240,.22)"/>
-
-        <!-- Right leg -->
-        <rect x="84" y="128" width="24" height="24" rx="12"
-          fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
-        <ellipse cx="96" cy="130" rx="9" ry="4.5"
-          fill="rgba(255,255,255,.42)"/>
-        <ellipse cx="96" cy="150" rx="10" ry="3"
-          fill="rgba(170,195,240,.22)"/>
-
-        <!-- ── Leg joint lines ── -->
-        <rect x="48" y="124" width="12" height="6" rx="3"
-          fill="rgba(180,205,240,.35)"/>
-        <rect x="90" y="124" width="12" height="6" rx="3"
-          fill="rgba(180,205,240,.35)"/>
+        <rect x="30" y="55" width="33" height="3" rx="1.5" fill="rgba(74,143,255,.2)"/>
+        <rect x="87" y="55" width="33" height="3" rx="1.5" fill="rgba(74,143,255,.2)"/>
+        <path d="M 57 65 Q 75 71 93 65" stroke="rgba(140,175,230,.55)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M 60 66 Q 75 70 90 66" stroke="rgba(200,220,250,.2)" stroke-width="1" stroke-linecap="round" fill="none"/>
+        <rect x="42" y="128" width="24" height="24" rx="12" fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
+        <ellipse cx="54" cy="130" rx="9" ry="4.5" fill="rgba(255,255,255,.42)"/>
+        <ellipse cx="54" cy="150" rx="10" ry="3" fill="rgba(170,195,240,.22)"/>
+        <rect x="84" y="128" width="24" height="24" rx="12" fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
+        <ellipse cx="96" cy="130" rx="9" ry="4.5" fill="rgba(255,255,255,.42)"/>
+        <ellipse cx="96" cy="150" rx="10" ry="3" fill="rgba(170,195,240,.22)"/>
+        <rect x="48" y="124" width="12" height="6" rx="3" fill="rgba(180,205,240,.35)"/>
+        <rect x="90" y="124" width="12" height="6" rx="3" fill="rgba(180,205,240,.35)"/>
       </svg>
-    </div><!-- /bx-stage -->
+    </div>
 
     <div class="brand">BAYMAX <span class="z">ZONE</span></div>
     <div class="tagline">Acceso instantáneo a <b>códigos</b></div>
@@ -958,7 +845,7 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
       <div class="chip">⚡ Respuesta inmediata</div>
       <div class="chip">🔒 100% seguro</div>
     </div>
-  </div><!-- /header -->
+  </div>
 
   <!-- ══ STEPS ══ -->
   <div class="steps">
@@ -1030,7 +917,7 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
           </div>
         </div>
 
-        <!-- Netflix subtypes -->
+        <!-- Netflix subtypes — KEY FIX: removed inline display toggling, uses CSS max-height -->
         <div class="nsub" id="nsub">
           <div class="nsub-head">¿Qué código necesitas?</div>
           <div class="nsub-grid">
@@ -1061,7 +948,6 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
             <input type="email" id="emailIn" placeholder="tucuenta@gmail.com" autocomplete="email">
             <span class="inp-ic">✉</span>
           </div>
-          <!-- ── INVALID EMAIL ERROR ── -->
           <div class="err-email-msg" id="errEmail">
             ❌ Gmail incorrecto o no registrado
             <span>Verifica el correo de tu cuenta y vuelve a intentarlo</span>
@@ -1075,12 +961,10 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
         </button>
 
         <div class="err-box" id="errBox"></div>
-      </div><!-- /formState -->
+      </div>
 
       <!-- ══ RESULT STATE ══ -->
       <div class="result" id="resultState">
-
-        <!-- Baymax happy (green eyes = success) -->
         <svg class="res-bx" viewBox="0 0 150 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialGradient id="RG_b" cx="38%" cy="25%" r="72%">
@@ -1117,7 +1001,6 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
           <circle cx="56" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
           <circle cx="109" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
           <circle cx="113" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
-          <!-- Happy smile -->
           <path d="M 57 64 Q 75 74 93 64" stroke="rgba(0,200,140,.7)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
           <rect x="42" y="128" width="24" height="24" rx="12" fill="url(#RG_b)"/>
           <rect x="84" y="128" width="24" height="24" rx="12" fill="url(#RG_b)"/>
@@ -1146,10 +1029,10 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
 
         <div class="exp-badge" style="margin-top:16px;">⚠️ Úsalo antes de que expire</div>
         <button class="btn-back" onclick="resetAll()">← Consultar de nuevo</button>
-      </div><!-- /resultState -->
+      </div>
 
-    </div><!-- /card -->
-  </div><!-- /card-wrap -->
+    </div>
+  </div>
 
   <!-- ══ FOOTER ══ -->
   <div class="footer">
@@ -1165,10 +1048,10 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
     <div class="copy">© 2025 <b>Baymax Zone</b> — Todos los derechos reservados</div>
   </div>
 
-</div><!-- /page -->
+</div>
 
 <!-- ═══════════════════════════════════════
-     CANVAS STARFIELD SCRIPT
+     CANVAS STARFIELD
 ═══════════════════════════════════════ -->
 <script>
 (function(){
@@ -1210,8 +1093,6 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
 
   function draw(){
     ctx.clearRect(0,0,W,H);
-
-    // Stars
     stars.forEach(s=>{
       s.a += s.da;
       if(s.a>1){s.a=1;s.da*=-1;}
@@ -1223,8 +1104,6 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
       ctx.fillStyle=`rgba(200,220,255,${s.a})`;
       ctx.fill();
     });
-
-    // Shooting stars
     shooters.forEach((s,i)=>{
       s.life++;
       s.x += Math.cos(s.angle)*s.speed;
@@ -1247,7 +1126,6 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
       ctx.stroke();
       if(s.life>=s.maxLife) shooters.splice(i,1);
     });
-
     requestAnimationFrame(draw);
   }
 
@@ -1261,28 +1139,17 @@ body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
      APP LOGIC
 ═══════════════════════════════════════ -->
 <script>
-/* ── CONFIG ── */
 const API  = 'https://script.google.com/macros/s/AKfycbwi0358Ng_7drTnNovHHRFC9fZCiwvhh1mMGKAXSQMIK-t-OlFPk82ZEgqK2ZuD3kLwpQ/exec';
 const WA   = '51986165524';
 const MAIL = 'jeffryperezhuallasco@gmail.com';
 
-/*
- * CORREOS REGISTRADOS — Agrega aquí todos los correos de tus cuentas.
- * Si dejas la lista VACÍA, se omite la validación local (útil mientras configuras).
- */
-const CORREOS = [
-  /* Ejemplo:
-  'tucuenta1@gmail.com',
-  'tucuenta2@gmail.com',
-  */
-];
+const CORREOS = [];
 
 document.getElementById('waBtn').href   = `https://wa.me/${WA}`;
 document.getElementById('mailBtn').href = `mailto:${MAIL}`;
 
 let svc = null;
 
-/* ─── Helpers ─── */
 function show(ids){ setTimeout(()=>ids.forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); }),80); }
 function hide(ids){ ids.forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); }); }
 
@@ -1296,9 +1163,8 @@ function setStep(n){
   }
 }
 
-/* ─── Email validation ─── */
 function emailIsRegistered(email){
-  if(!CORREOS.length) return true; // skip if list empty
+  if(!CORREOS.length) return true;
   return CORREOS.map(e=>e.toLowerCase().trim()).includes(email.toLowerCase().trim());
 }
 
@@ -1312,7 +1178,7 @@ function clearEmailErr(){
   document.getElementById('emailIn').classList.remove('invalid');
 }
 
-/* ─── Service selection ─── */
+/* KEY FIX: pickSvc now uses only classList for nsub — no display toggling */
 function pickSvc(s){
   document.body.className = s==='n'?'sn':'sd';
   document.getElementById('cN').className='svc svc-n'+(s==='n'?' sel':'');
@@ -1321,15 +1187,11 @@ function pickSvc(s){
   clearEmailErr(); clearErr();
 
   if(s==='n'){
-    const sub=document.getElementById('nsub');
-    sub.style.display='block';
-    requestAnimationFrame(()=>sub.classList.add('show'));
+    document.getElementById('nsub').classList.add('show');
     hide(['fdiv','frow','btnGo']);
     svc=null;
   } else {
-    const sub=document.getElementById('nsub');
-    sub.classList.remove('show');
-    setTimeout(()=>sub.style.display='none',400);
+    document.getElementById('nsub').classList.remove('show');
     document.getElementById('bH').className='nsub-btn';
     document.getElementById('bL').className='nsub-btn';
     svc='disney';
@@ -1348,19 +1210,11 @@ function pickNT(t){
   setTimeout(()=>document.getElementById('emailIn').focus(),200);
 }
 
-/* ─── Submit ─── */
 async function doSubmit(){
   const email=document.getElementById('emailIn').value.trim();
-
   if(!svc){ showErr('👆 Elige el tipo de código primero.'); return; }
   if(!email||!email.includes('@')){ showErr('📧 Ingresa un correo válido.'); return; }
-
-  /* Validate against registered list */
-  if(!emailIsRegistered(email)){
-    showEmailErr();
-    return;
-  }
-
+  if(!emailIsRegistered(email)){ showEmailErr(); return; }
   clearEmailErr(); clearErr();
 
   const btn=document.getElementById('btnGo');
@@ -1371,13 +1225,8 @@ async function doSubmit(){
   try{
     const res  = await fetch(`${API}?servicio=${map[svc]}&correo=${encodeURIComponent(email)}`);
     const data = await res.json();
-
-    if(data.success && data.valor){
-      showResult(data);
-    } else {
-      /* API returned no code — show red email error */
-      showEmailErr();
-    }
+    if(data.success && data.valor){ showResult(data); }
+    else { showEmailErr(); }
   }catch(err){
     showErr('❌ Error de conexión. Intenta de nuevo.');
   }finally{
@@ -1385,7 +1234,6 @@ async function doSubmit(){
   }
 }
 
-/* ─── Show result ─── */
 function showResult(data){
   document.getElementById('formState').style.display='none';
   const rs=document.getElementById('resultState');
@@ -1413,7 +1261,6 @@ function showResult(data){
   }
 }
 
-/* ─── Misc ─── */
 function showErr(msg){ const b=document.getElementById('errBox'); b.textContent=msg; b.style.display='block'; setTimeout(()=>b.style.display='none',5000); }
 function clearErr(){ document.getElementById('errBox').style.display='none'; }
 
@@ -1427,7 +1274,7 @@ function resetAll(){
   document.getElementById('bH').className='nsub-btn';
   document.getElementById('bL').className='nsub-btn';
   document.getElementById('cico').textContent='📺';
-  const sub=document.getElementById('nsub'); sub.classList.remove('show'); sub.style.display='none';
+  document.getElementById('nsub').classList.remove('show');
   hide(['fdiv','frow','btnGo']); clearEmailErr(); clearErr(); setStep(1);
 }
 
