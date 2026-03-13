@@ -123,13 +123,12 @@ body.sd .cico{background:rgba(26,111,255,.1);border-color:rgba(26,111,255,.3);bo
   opacity: 0;
   transform: translateY(8px);
   transition: opacity .4s, transform .4s;
-  width: 100%;              /* ocupa todo el ancho disponible */
-  max-width: 560px;         /* igual que la tarjeta principal */
-  margin-left: auto;        /* centra horizontalmente */
-  margin-right: auto;       /* centra horizontalmente */
-  text-align: center;       /* asegura que el contenido quede centrado */
+  width: 100%;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
-
 .nsub.show {
   display: block;
   opacity: 1;
@@ -534,19 +533,40 @@ function emailOK(e){if(!CORREOS.length)return true;return CORREOS.map(x=>x.toLow
 function showEE(){document.getElementById('errEmail').style.display='block';document.getElementById('emailIn').classList.add('invalid');}
 function clearEE(){document.getElementById('errEmail').style.display='none';document.getElementById('emailIn').classList.remove('invalid');}
 function pickSvc(s){
-  document.body.className=s==='n'?'sn':'sd';
-  document.getElementById('cN').className='svc svc-n'+(s==='n'?' sel':'');
-  document.getElementById('cD').className='svc svc-d'+(s==='d'?' sel':'');
-  document.getElementById('cico').textContent=s==='n'?'🎬':'🏰';
-  clearEE();clearErr();
-  if(s==='n'){
-    const sub=document.getElementById('nsub');sub.style.display='block';requestAnimationFrame(()=>sub.classList.add('show'));
-    hide(['fdiv','frow','btnGo']);svc=null;
-  }else{
-    const sub=document.getElementById('nsub');sub.classList.remove('show');setTimeout(()=>sub.style.display='none',400);
-    document.getElementById('bH').className='nsub-btn';document.getElementById('bL').className='nsub-btn';
-    svc='disney';show(['fdiv','frow','btnGo']);setTimeout(()=>document.getElementById('emailIn').focus(),350);
+  // Cambiar tema visual
+  document.body.className = s === 'n' ? 'sn' : 'sd';
+  document.getElementById('cN').className = 'svc svc-n' + (s === 'n' ? ' sel' : '');
+  document.getElementById('cD').className = 'svc svc-d' + (s === 'd' ? ' sel' : '');
+  document.getElementById('cico').textContent = s === 'n' ? '🎬' : '🏰';
+
+  clearEE();
+  clearErr();
+
+  const sub = document.getElementById('nsub');
+
+  if (s === 'n') {
+    // Mostrar Netflix centrado
+    sub.classList.add('show');
+    sub.style.display = 'block';
+
+    // Resetear botones internos
+    document.getElementById('bH').className = 'nsub-btn';
+    document.getElementById('bL').className = 'nsub-btn';
+
+    // Ocultar correo y botón hasta que elija método
+    hide(['fdiv','frow','btnGo']);
+    svc = 'netflix';
+  } else {
+    // Ocultar Netflix
+    sub.classList.remove('show');
+    setTimeout(() => sub.style.display = 'none', 400);
+
+    // Mostrar correo y botón para Disney
+    svc = 'disney';
+    show(['fdiv','frow','btnGo']);
+    setTimeout(() => document.getElementById('emailIn').focus(), 350);
   }
+}
   setStep(2);
 }
 function pickNT(t){
