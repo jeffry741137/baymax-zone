@@ -532,41 +532,24 @@ function setStep(n){const icons=['🔥','2','3'];for(let i=1;i<=3;i++){const num
 function emailOK(e){if(!CORREOS.length)return true;return CORREOS.map(x=>x.toLowerCase().trim()).includes(e.toLowerCase().trim());}
 function showEE(){document.getElementById('errEmail').style.display='block';document.getElementById('emailIn').classList.add('invalid');}
 function clearEE(){document.getElementById('errEmail').style.display='none';document.getElementById('emailIn').classList.remove('invalid');}
-function pickSvc(s){
-  // Cambiar tema visual
-  document.body.className = s === 'n' ? 'sn' : 'sd';
-  document.getElementById('cN').className = 'svc svc-n' + (s === 'n' ? ' sel' : '');
-  document.getElementById('cD').className = 'svc svc-d' + (s === 'd' ? ' sel' : '');
-  document.getElementById('cico').textContent = s === 'n' ? '🎬' : '🏰';
+function pickSvc(svc) {
+  // limpiar selección
+  document.getElementById("cN").classList.remove("sel");
+  document.getElementById("cD").classList.remove("sel");
+  document.getElementById("nsub").classList.remove("show");
+  document.getElementById("fdiv").classList.remove("show");
+  document.getElementById("frow").classList.remove("show");
+  document.getElementById("btnGo").classList.remove("show");
 
-  clearEE();
-  clearErr();
-
-  const sub = document.getElementById('nsub');
-
-  if (s === 'n') {
-    // Mostrar Netflix centrado
-    sub.classList.add('show');
-    sub.style.display = 'block';
-
-    // Resetear botones internos
-    document.getElementById('bH').className = 'nsub-btn';
-    document.getElementById('bL').className = 'nsub-btn';
-
-    // Ocultar correo y botón hasta que elija método
-    hide(['fdiv','frow','btnGo']);
-    svc = 'netflix';
-  } else {
-    // Ocultar Netflix
-    sub.classList.remove('show');
-    setTimeout(() => sub.style.display = 'none', 400);
-
-    // Mostrar correo y botón para Disney
-    svc = 'disney';
-    show(['fdiv','frow','btnGo']);
-    setTimeout(() => document.getElementById('emailIn').focus(), 350);
+  if (svc === "n") {
+    // activar Netflix
+    document.getElementById("cN").classList.add("sel");
+    document.getElementById("nsub").classList.add("show"); // <-- aquí se muestra centrado
+  } else if (svc === "d") {
+    // activar Disney
+    document.getElementById("cD").classList.add("sel");
+    document.getElementById("boxDisney").style.display = "block"; // ejemplo de mostrar Disney
   }
-}
   setStep(2);
 }
 function pickNT(t){
