@@ -546,14 +546,15 @@ function pickSvc(svc) {
     document.getElementById("cN").classList.add("sel");
     document.getElementById("nsub").classList.add("show"); 
     hide(['fdiv','frow','btnGo']); 
-    window.svc = "netflix";   // importante: marcar que es Netflix
+    window.svc = "nh"; // o "nl" después de elegir tipo, pero aquí marcamos Netflix
   } else if (svc === "d") {
     // activar Disney
     document.getElementById("cD").classList.add("sel");
     show(['fdiv','frow','btnGo']); 
     setTimeout(() => document.getElementById("emailIn").focus(), 350);
-    window.svc = "disney";    // marcar que es Disney
+    window.svc = "disney"; // <-- importante: marcar Disney
   }
+}
 
   setStep(2);
 }
@@ -563,28 +564,23 @@ function pickNT(t){
   document.getElementById('bL').className='nsub-btn'+(t==='nl'?' sel':'');
   clearEE();clearErr();show(['fdiv','frow','btnGo']);setTimeout(()=>document.getElementById('emailIn').focus(),200);
 }
-function doSubmit() {
-  clearErr();
-
-  if (window.svc === "netflix") {
-    // aquí sí necesitas que haya elegido Hogar o Login
-    if (!window.ntype) {
-      showErr("⚔️ Elige el tipo de código primero.");
-      return;
-    }
-    // continuar con lógica de Netflix...
-  }
-
-  if (window.svc === "disney") {
-    // en Disney no se necesita elegir tipo de código
-    const email = document.getElementById("emailIn").value.trim();
-    if (!email) {
-      showErr("❌ Ingresa tu correo primero.");
-      return;
-    }
-    // continuar con lógica de Disney...
-  }
+lo doSubmit () esta bien 
+async function doSubmit(){
+  const email=document.getElementById('emailIn').value.trim();
+  if(!svc){showErr('⚔️ Elige el tipo de código primero.');return;}
+  if(!email||!email.includes('@')){showErr('📧 Ingresa un correo válido.');return;}
+  if(!emailOK(email)){showEE();return;}
+  clearEE();clearErr();
+  const btn=document.getElementById('btnGo');btn.classList.add('loading');btn.disabled=true;
+  const map={nh:'netflix_hogar',nl:'netflix_login',disney:'disney'};
+  try{
+    const res=await fetch(`${API}?servicio=${map[svc]}&correo=${encodeURIComponent(email)}`);
+    const data=await res.json();
+    if(data.success&&data.valor)showResult(data);else showEE();
+  }catch{showErr('❌ Error de conexión. Intenta de nuevo.');}
+  finally{btn.classList.remove('loading');btn.disabled=false;}
 }
+
 function showResult(data){
   document.getElementById('formState').style.display='none';
   document.getElementById('resultState').style.display='flex';
