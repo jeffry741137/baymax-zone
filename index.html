@@ -116,7 +116,17 @@ body.sd .cico{background:rgba(26,111,255,.1);border-color:rgba(26,111,255,.3);bo
 .hot{position:absolute;top:0;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#8b0000,#cc1818);color:#ffcccc;font-size:8px;font-weight:800;padding:3px 10px;border-radius:0 0 9px 9px;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 2px 8px rgba(204,24,24,.4);}
 
 /* ══ NETFLIX SUB ══ */
-.nsub{display:none;margin-top:18px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;}
+.nsub {
+  display: none;
+  margin-top: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .4s, transform .4s;
+  width: 100%;              /* ocupa todo el ancho disponible */
+  max-width: 560px;         /* igual que la tarjeta principal */
+  margin-left: auto;        /* centra horizontalmente */
+  margin-right: auto;       /* centra horizontalmente */
+}
 .nsub.show{opacity:1;transform:translateY(0);}
 .nsub-head{font-size:10px;font-weight:700;color:var(--red3);letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;}
 .nsub-head::before{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(204,24,24,.4));}
