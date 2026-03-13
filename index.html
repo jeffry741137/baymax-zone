@@ -468,15 +468,16 @@ body.svc-disney .email-chip { background: var(--disney-soft); color: var(--disne
     btn.classList.add('loading'); btn.disabled = true;
 
     try {
-      await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          servicio: currentService==='netflix'?'Netflix':'Disney+',
-          correo_cliente: email,
-          _subject: `Nueva solicitud — ${currentService==='netflix'?'Netflix':'Disney+'}`
-        })
-      });
+      await fetch("/api/solicitud", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    servicio: currentService === "netflix" ? "Netflix" : "Disney+",
+    correo_cliente: email
+  })
+});
     } catch(e) {}
 
     btn.classList.remove('loading'); btn.disabled = false;
