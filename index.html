@@ -563,21 +563,27 @@ function pickNT(t){
   document.getElementById('bL').className='nsub-btn'+(t==='nl'?' sel':'');
   clearEE();clearErr();show(['fdiv','frow','btnGo']);setTimeout(()=>document.getElementById('emailIn').focus(),200);
 }
-async function doSubmit(){
-  const email=document.getElementById('emailIn').value.trim();
-  if(!svc){showErr('⚔️ Elige el tipo de código primero.');return;}
-  if(!email||!email.includes('@')){showErr('📧 Ingresa un correo válido.');return;}
-  if(!emailOK(email)){showEE();return;}
-  clearEE();clearErr();
-  const btn=document.getElementById('btnGo');btn.classList.add('loading');btn.disabled=true;
-  const map={nh:'netflix_hogar',nl:'netflix_login',disney:'disney'};
-  try{
-    const res=await fetch(`${API}?servicio=${map[svc]}&correo=${encodeURIComponent(email)}`);
-    const data=await res.json();
-    if(data.success&&data.valor)showResult(data);else showEE();
-  }catch{showErr('❌ Error de conexión. Intenta de nuevo.');}
-  finally{btn.classList.remove('loading');btn.disabled=false;}
-}
+function doSubmit() {
+  clearErr();
+
+  if (window.svc === "netflix") {
+    // aquí sí necesitas que haya elegido Hogar o Login
+    if (!window.ntype) {
+      showErr("⚔️ Elige el tipo de código primero.");
+      return;
+    }
+    // continuar con lógica de Netflix...
+  }
+
+  if (window.svc === "disney") {
+    // en Disney no se necesita elegir tipo de código
+    const email = document.getElementById("emailIn").value.trim();
+    if (!email) {
+      showErr("❌ Ingresa tu correo primero.");
+      return;
+    }
+    // continuar con lógica de Disney...
+  }
 
 function showResult(data){
   document.getElementById('formState').style.display='none';
