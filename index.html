@@ -4,1136 +4,1430 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baymax Zone — Streaming Codes</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Clash+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
-
+/* ═══════════════════════════════════════
+   VARIABLES
+═══════════════════════════════════════ */
 :root {
-  --bg:        #080b12;
-  --bg2:       #0d1117;
-  --surface:   #111520;
-  --surface2:  #161c2d;
-  --border:    rgba(255,255,255,0.06);
-  --border2:   rgba(255,255,255,0.1);
-  --text:      #f0f2ff;
-  --text2:     #a0a8c8;
-  --muted:     #525878;
-  --accent:    #4f8eff;
-  --accent2:   #7eb8ff;
-  --glow:      rgba(79,142,255,0.15);
-  --netflix:   #e50914;
-  --netflix2:  #ff4757;
-  --nglow:     rgba(229,9,20,0.2);
-  --disney:    #1a6fff;
-  --disney2:   #5ba3ff;
-  --dglow:     rgba(26,111,255,0.2);
-  --gold:      #f5c842;
-  --green:     #00d68f;
+  --bg:       #03050e;
+  --s1:       #090d1c;
+  --s2:       #0d1228;
+  --s3:       #111730;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --text:     #e8eeff;
+  --text2:    #7a85ab;
+  --muted:    #383f60;
+  --acc:      #4a8fff;
+  --acc2:     #80b8ff;
+  --green:    #00e5a0;
+  --gold:     #f5c218;
+  --nred:     #e8091a;
+  --nred2:    #ff5060;
+  --dblue:    #1a70ff;
+  --dblue2:   #60aaff;
+  --nglow:    rgba(232,9,26,0.3);
+  --dglow:    rgba(26,112,255,0.3);
+  --aglow:    rgba(74,143,255,0.25);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+/* ═══════════════════════════════════════
+   STARFIELD BACKGROUND
+═══════════════════════════════════════ */
+#canvas-bg{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
 }
 
-/* ── BACKGROUND ── */
-.bg-scene {
-  position: fixed; inset: 0; z-index: 0;
-  overflow: hidden; pointer-events: none;
+/* Nebula layers */
+.nebula{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.neb1{width:800px;height:600px;top:-200px;left:-200px;background:radial-gradient(ellipse,rgba(20,40,160,0.22),transparent 70%);animation:nebDrift 20s ease-in-out infinite;}
+.neb2{width:700px;height:500px;bottom:-150px;right:-150px;background:radial-gradient(ellipse,rgba(74,143,255,0.14),transparent 70%);animation:nebDrift 24s ease-in-out infinite reverse;}
+.neb3{width:500px;height:400px;top:30%;left:35%;background:radial-gradient(ellipse,rgba(232,9,26,0.06),transparent 70%);animation:nebDrift 16s ease-in-out infinite 8s;}
+@keyframes nebDrift{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-40px) scale(1.08);}
+  66%{transform:translate(-20px,20px) scale(0.94);}
 }
 
-/* Deep space gradient */
-.bg-scene::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(79,142,255,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(126,184,255,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(17,21,32,0.8) 0%, transparent 100%);
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+.page{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:56px 20px 50px;
 }
 
-/* Grain texture */
-.bg-scene::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: 0.4;
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.header{
+  text-align:center;margin-bottom:36px;
+  animation:slideDown .9s cubic-bezier(.22,1,.36,1) both;
 }
 
-/* Animated orbs */
-.orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: 0;
-  animation: orbPulse 12s ease-in-out infinite;
-}
-.orb-1 { width:600px; height:600px; top:-200px; left:-100px; background:rgba(79,142,255,0.07); animation-delay:0s; }
-.orb-2 { width:500px; height:500px; bottom:-150px; right:-100px; background:rgba(126,184,255,0.05); animation-delay:4s; }
-.orb-3 { width:300px; height:300px; top:40%; left:60%; background:rgba(79,142,255,0.04); animation-delay:8s; }
-@keyframes orbPulse {
-  0%,100%{opacity:0; transform:scale(1);}
-  50%{opacity:1; transform:scale(1.1);}
+/* ── Baymax stage ── */
+.bx-stage{
+  position:relative;width:190px;height:200px;
+  margin:0 auto 22px;
 }
 
-/* Grid lines */
-.bg-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(79,142,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79,142,255,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+/* Platform glow */
+.bx-plat{
+  position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  width:140px;height:36px;
+  background:radial-gradient(ellipse at center,rgba(74,143,255,0.55) 0%,transparent 70%);
+  filter:blur(10px);
+  animation:platPulse 3.5s ease-in-out infinite;
+}
+@keyframes platPulse{
+  0%,100%{opacity:.65;width:130px;}
+  50%{opacity:1;width:155px;}
 }
 
-/* Floating particles */
-.particle {
-  position: absolute;
-  width: 2px; height: 2px;
-  background: var(--accent2);
-  border-radius: 50%;
-  opacity: 0;
-  animation: particleFloat linear infinite;
+/* Outer halo rings */
+.bx-halo{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(74,143,255,0.12);
+  animation:haloPulse 3.5s ease-in-out infinite;
 }
-@keyframes particleFloat {
-  0%   { opacity:0; transform: translateY(0) scale(0); }
-  10%  { opacity:0.6; transform: translateY(-20px) scale(1); }
-  90%  { opacity:0.3; transform: translateY(-200px) scale(0.5); }
-  100% { opacity:0; transform: translateY(-240px) scale(0); }
+.bx-halo1{inset:8px;animation-delay:0s;}
+.bx-halo2{inset:-10px;border-color:rgba(74,143,255,0.05);animation-delay:1.2s;}
+@keyframes haloPulse{
+  0%,100%{opacity:.4;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.04);}
 }
 
-/* ── LAYOUT ── */
-.wrapper {
-  position: relative; z-index: 1;
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 60px 20px;
-  gap: 0;
+/* Baymax float */
+.bx-svg{
+  position:absolute;
+  bottom:22px;left:50%;
+  width:150px;height:160px;
+  transform:translateX(-50%);
+  animation:bxFloat 4.5s ease-in-out infinite;
+  filter:
+    drop-shadow(0 18px 50px rgba(74,143,255,0.35))
+    drop-shadow(0 6px 18px rgba(0,0,0,.7));
+}
+@keyframes bxFloat{
+  0%,100%{transform:translateX(-50%) translateY(0) rotate(-1.2deg);}
+  50%{transform:translateX(-50%) translateY(-14px) rotate(1.2deg);}
 }
 
-/* ── HEADER ── */
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-  animation: fadeDown 0.9s cubic-bezier(0.22,1,0.36,1) both;
+/* ── Brand ── */
+.brand{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(42px,9vw,72px);
+  font-weight:900;letter-spacing:-2.5px;line-height:1;
+  color:var(--text);
+}
+.brand .z{
+  background:linear-gradient(135deg,#4a8fff 0%,#80b8ff 45%,#c4e0ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.tagline{
+  margin-top:10px;font-size:15px;font-weight:500;
+  color:var(--text2);letter-spacing:.2px;
+}
+.tagline b{color:var(--text);font-weight:700;}
+
+.chips{
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin-top:18px;flex-wrap:wrap;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border2);border-radius:30px;
+  font-size:11px;font-weight:600;color:var(--text2);
+  backdrop-filter:blur(12px);
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:dotBlink 2.2s ease-in-out infinite;
+}
+@keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* ═══════════════════════════════════════
+   STEPS
+═══════════════════════════════════════ */
+.steps{
+  display:flex;align-items:center;
+  margin-bottom:22px;
+  animation:slideDown .9s .1s cubic-bezier(.22,1,.36,1) both;
+}
+.si{display:flex;align-items:center;gap:8px;}
+.sn{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--s2);border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--muted);
+  transition:all .4s ease;
+}
+.sn.active{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 0 20px rgba(74,143,255,.65);}
+.sn.done{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 0 16px rgba(0,229,160,.5);}
+.sl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;transition:color .3s;}
+.sl.active{color:var(--acc2);}
+.sc{width:44px;height:1px;background:var(--border2);margin:0 5px;}
+
+/* ═══════════════════════════════════════
+   CARD with animated border
+═══════════════════════════════════════ */
+.card-wrap{
+  width:100%;max-width:540px;
+  position:relative;
+  animation:slideUp 1s .15s cubic-bezier(.22,1,.36,1) both;
 }
 
-/* Baymax SVG mascot */
-.baymax-wrap {
-  position: relative;
-  width: 120px; height: 120px;
-  margin: 0 auto 24px;
+/* Rotating gradient border */
+.card-glow{
+  position:absolute;inset:-1.5px;border-radius:30px;
+  background:conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(74,143,255,0) 20%,
+    rgba(74,143,255,.7) 30%,
+    rgba(126,184,255,.5) 35%,
+    rgba(74,143,255,0) 45%,
+    transparent 100%
+  );
+  animation:rotateBorder 5s linear infinite;
+  z-index:0;
+}
+@keyframes rotateBorder{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
 }
 
-.baymax-glow {
-  position: absolute; inset: -20px;
-  background: radial-gradient(circle, rgba(79,142,255,0.2) 0%, transparent 70%);
-  animation: glowPulse 3s ease-in-out infinite;
-  border-radius: 50%;
+/* Netflix glow override */
+body.sn .card-glow{
+  background:conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(232,9,26,0) 20%,
+    rgba(232,9,26,.65) 30%,
+    rgba(255,90,100,.45) 35%,
+    rgba(232,9,26,0) 45%,
+    transparent 100%
+  );
 }
-@keyframes glowPulse {
-  0%,100%{opacity:0.5; transform:scale(1);}
-  50%{opacity:1; transform:scale(1.1);}
-}
-
-.baymax-svg {
-  width: 120px; height: 120px;
-  animation: baymaxFloat 4s ease-in-out infinite;
-  filter: drop-shadow(0 10px 30px rgba(79,142,255,0.3));
-}
-@keyframes baymaxFloat {
-  0%,100%{transform:translateY(0) rotate(-1deg);}
-  50%{transform:translateY(-10px) rotate(1deg);}
-}
-
-.brand-lockup {
-  position: relative; display: inline-block;
-}
-
-.brand-name {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(38px, 8vw, 64px);
-  font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 1;
-  color: var(--text);
-  position: relative;
-}
-.brand-name .zone {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, #c4e0ff 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  position: relative;
-}
-.brand-name .zone::after {
-  content: '';
-  position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  border-radius: 2px;
+/* Disney glow override */
+body.sd .card-glow{
+  background:conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(26,112,255,0) 20%,
+    rgba(26,112,255,.65) 30%,
+    rgba(90,170,255,.45) 35%,
+    rgba(26,112,255,0) 45%,
+    transparent 100%
+  );
 }
 
-.brand-sub {
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-.status-bar {
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px; margin-top: 18px; flex-wrap: wrap;
-}
-.status-chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border2);
-  border-radius: 30px;
-  font-size: 11px; font-weight: 600;
-  color: var(--text2);
-  backdrop-filter: blur(10px);
-}
-.status-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: dotBlink 2s ease-in-out infinite;
-}
-@keyframes dotBlink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-/* ── STEPS ── */
-.steps-wrap {
-  display: flex; align-items: center; gap: 0;
-  margin-bottom: 24px;
-  animation: fadeDown 0.9s 0.1s cubic-bezier(0.22,1,0.36,1) both;
-}
-.step-item { display: flex; align-items: center; gap: 8px; }
-.step-num {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--surface2);
-  border: 1.5px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--muted);
-  transition: all 0.4s ease;
-  position: relative;
-}
-.step-num.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-  box-shadow: 0 0 20px rgba(79,142,255,0.5);
-}
-.step-num.done {
-  background: var(--green);
-  border-color: var(--green);
-  color: white;
-  box-shadow: 0 0 15px rgba(0,214,143,0.4);
-}
-.step-label {
-  font-size: 11px; font-weight: 700;
-  color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
-}
-.step-label.active { color: var(--accent2); }
-.step-connector {
-  width: 40px; height: 1px;
-  background: linear-gradient(90deg, var(--border2), transparent);
-  margin: 0 4px;
-}
-
-/* ── CARD ── */
-.card {
-  width: 100%; max-width: 520px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 28px;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-  animation: fadeUp 0.9s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+.card{
+  position:relative;z-index:1;
+  background:linear-gradient(155deg,rgba(13,18,40,.97) 0%,rgba(8,11,24,.99) 100%);
+  border:1px solid var(--border2);
+  border-radius:28px;
+  padding:40px 38px;
+  overflow:hidden;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.03) inset,
-    0 30px 80px rgba(0,0,0,0.5),
-    0 0 60px rgba(79,142,255,0.05);
+    0 0 0 1px rgba(255,255,255,.035) inset,
+    0 32px 90px rgba(0,0,0,.65),
+    0 0 80px rgba(74,143,255,.06);
 }
 
-/* Card shimmer border top */
-.card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(79,142,255,0.6), rgba(126,184,255,0.4), transparent);
+/* Top shimmer line */
+.card::after{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(74,143,255,.7),rgba(126,184,255,.5),transparent);
 }
 
-/* Card corner decorations */
-.card::after {
-  content: '';
-  position: absolute; top: -1px; right: -1px;
-  width: 60px; height: 60px;
-  background: radial-gradient(circle at top right, rgba(79,142,255,0.08), transparent);
-  border-radius: 0 28px 0 0;
-}
+/* Corner accents */
+.cc{position:absolute;pointer-events:none;}
+.cc.tl{top:0;left:0;width:90px;height:90px;background:radial-gradient(circle at 0 0,rgba(74,143,255,.08),transparent 70%);}
+.cc.tr{top:0;right:0;width:90px;height:90px;background:radial-gradient(circle at 100% 0,rgba(74,143,255,.06),transparent 70%);}
+.cc.bl{bottom:0;left:0;width:70px;height:70px;background:radial-gradient(circle at 0 100%,rgba(74,143,255,.04),transparent 70%);}
 
-.card-label {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 20px;
+/* Inner card glow that reacts to service */
+.card-inner-glow{
+  position:absolute;inset:0;border-radius:28px;pointer-events:none;
+  background:radial-gradient(ellipse 70% 30% at 50% 0%,rgba(74,143,255,.05),transparent);
+  transition:background .5s ease;
 }
-.card-label-icon {
-  width: 38px; height: 38px;
-  background: rgba(79,142,255,0.1);
-  border: 1px solid rgba(79,142,255,0.2);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-}
-.card-label-text h3 { font-size: 15px; font-weight: 700; color: var(--text); }
-.card-label-text p  { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 1px; }
+body.sn .card-inner-glow{background:radial-gradient(ellipse 70% 30% at 50% 0%,rgba(232,9,26,.06),transparent);}
+body.sd .card-inner-glow{background:radial-gradient(ellipse 70% 30% at 50% 0%,rgba(26,112,255,.07),transparent);}
 
-/* ── SERVICE CARDS ── */
-.services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* ── Card header ── */
+.chead{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.cico{
+  width:42px;height:42px;border-radius:13px;
+  background:rgba(74,143,255,.1);border:1px solid rgba(74,143,255,.22);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  transition:all .4s;
+}
+body.sn .cico{background:rgba(232,9,26,.1);border-color:rgba(232,9,26,.22);}
+body.sd .cico{background:rgba(26,112,255,.1);border-color:rgba(26,112,255,.22);}
+.ctxt h3{font-size:16px;font-weight:800;color:var(--text);}
+.ctxt p{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;}
 
-.svc-card {
-  position: relative;
-  padding: 22px 16px 18px;
-  border-radius: 20px;
-  border: 1.5px solid var(--border2);
-  background: var(--surface2);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  display: flex; flex-direction: column; align-items: center;
-  gap: 10px; text-align: center; overflow: hidden;
-  user-select: none;
+/* ═══════════════════════════════════════
+   SERVICE CARDS
+═══════════════════════════════════════ */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.svc{
+  position:relative;
+  padding:24px 14px 20px;
+  border-radius:20px;
+  border:1.5px solid var(--border2);
+  background:linear-gradient(160deg,var(--s3),var(--s2));
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:11px;
+  text-align:center;overflow:hidden;user-select:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
 }
-.svc-card::before {
-  content: ''; position: absolute; inset: 0; opacity: 0;
-  transition: opacity 0.3s;
-  border-radius: 18px;
+.svc::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  opacity:0;transition:opacity .35s;
 }
-.svc-card:hover { transform: translateY(-4px) scale(1.02); }
+.svc:hover{transform:translateY(-5px) scale(1.03);}
+
+/* Logo shine sweep */
+.svc-logo::after{
+  content:'';position:absolute;top:-60%;left:-60%;
+  width:40%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transform:rotate(20deg);
+  transition:left .6s ease;
+}
+.svc:hover .svc-logo::after{left:160%;}
 
 /* Netflix */
-.svc-netflix::before { background: radial-gradient(ellipse at top, rgba(229,9,20,0.1), transparent); }
-.svc-netflix:hover, .svc-netflix.sel {
-  border-color: var(--netflix);
-  box-shadow: 0 8px 40px var(--nglow), 0 0 0 1px rgba(229,9,20,0.1) inset;
+.svc-n::before{background:radial-gradient(ellipse at 50% 0%,rgba(232,9,26,.14),transparent 65%);}
+.svc-n:hover,.svc-n.sel{
+  border-color:var(--nred);
+  box-shadow:0 10px 45px var(--nglow), 0 0 0 1px rgba(232,9,26,.1) inset;
 }
-.svc-netflix.sel::before { opacity: 1; }
-.svc-netflix.sel { transform: translateY(-4px) scale(1.02); }
+.svc-n.sel::before{opacity:1;}
+.svc-n.sel{transform:translateY(-5px) scale(1.03);}
 
 /* Disney */
-.svc-disney::before { background: radial-gradient(ellipse at top, rgba(26,111,255,0.1), transparent); }
-.svc-disney:hover, .svc-disney.sel {
-  border-color: var(--disney);
-  box-shadow: 0 8px 40px var(--dglow), 0 0 0 1px rgba(26,111,255,0.1) inset;
+.svc-d::before{background:radial-gradient(ellipse at 50% 0%,rgba(26,112,255,.14),transparent 65%);}
+.svc-d:hover,.svc-d.sel{
+  border-color:var(--dblue);
+  box-shadow:0 10px 45px var(--dglow), 0 0 0 1px rgba(26,112,255,.1) inset;
 }
-.svc-disney.sel::before { opacity: 1; }
-.svc-disney.sel { transform: translateY(-4px) scale(1.02); }
+.svc-d.sel::before{opacity:1;}
+.svc-d.sel{transform:translateY(-5px) scale(1.03);}
 
-.svc-logo {
-  width: 58px; height: 58px;
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.3s ease;
-  position: relative;
-  overflow: hidden;
+.svc-logo{
+  width:64px;height:64px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  transition:transform .3s ease;
 }
-.svc-card:hover .svc-logo { transform: scale(1.08) rotate(-3deg); }
+.svc:hover .svc-logo{transform:scale(1.1) rotate(-4deg);}
 
-.logo-netflix {
-  background: linear-gradient(145deg, #e50914 0%, #8b0000 100%);
-  box-shadow: 0 8px 24px rgba(229,9,20,0.4);
+.logo-n{
+  background:linear-gradient(145deg,#e8091a 0%,#960010 100%);
+  box-shadow:0 10px 30px rgba(232,9,26,.55);
 }
-.logo-disney {
-  background: linear-gradient(145deg, #1a4fff 0%, #0a1f80 100%);
-  box-shadow: 0 8px 24px rgba(26,79,255,0.4);
+.logo-d{
+  background:linear-gradient(145deg,#1e5bd4 0%,#0a1f80 100%);
+  box-shadow:0 10px 30px rgba(30,91,212,.55);
 }
 
-/* Netflix N logo SVG */
-.n-logo {
-  width: 32px; height: 32px;
+.svc-name{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+.svc-sub{font-size:10px;color:var(--muted);font-weight:500;}
+
+.svc-chk{
+  position:absolute;top:10px;right:10px;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#fff;font-weight:800;
+  transform:scale(0) rotate(-90deg);
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.svc-n.sel .svc-chk{background:var(--nred);transform:scale(1) rotate(0);box-shadow:0 0 14px var(--nred);}
+.svc-d.sel .svc-chk{background:var(--dblue);transform:scale(1) rotate(0);box-shadow:0 0 14px var(--dblue);}
+
+.hot{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  background:linear-gradient(90deg,#e8091a,#ff5060);
+  color:#fff;font-size:8px;font-weight:800;
+  padding:3px 10px;border-radius:0 0 9px 9px;
+  letter-spacing:1.5px;text-transform:uppercase;
 }
 
-.svc-name { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
-.svc-desc { font-size: 10px; color: var(--muted); font-weight: 500; }
+/* ═══════════════════════════════════════
+   NETFLIX SUBTYPE
+═══════════════════════════════════════ */
+.nsub{display:none;margin-top:18px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;}
+.nsub.show{opacity:1;transform:translateY(0);display:block;}
 
-.svc-check {
-  position: absolute; top: 10px; right: 10px;
-  width: 20px; height: 20px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: white; font-weight: 700;
-  transform: scale(0) rotate(-90deg);
-  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+.nsub-head{
+  font-size:10px;font-weight:700;color:var(--nred2);
+  letter-spacing:2px;text-transform:uppercase;text-align:center;
+  margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.svc-netflix.sel .svc-check { background: var(--netflix); transform: scale(1) rotate(0); box-shadow: 0 0 10px var(--netflix); }
-.svc-disney.sel  .svc-check { background: var(--disney);  transform: scale(1) rotate(0); box-shadow: 0 0 10px var(--disney); }
+.nsub-head::before,.nsub-head::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,9,26,.35));
+}
+.nsub-head::after{background:linear-gradient(90deg,rgba(232,9,26,.35),transparent);}
 
-.hot-tag {
-  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-  background: linear-gradient(90deg, var(--netflix), #ff6b6b);
-  color: white; font-size: 8px; font-weight: 800;
-  padding: 3px 10px; border-radius: 0 0 8px 8px;
-  letter-spacing: 1.5px; text-transform: uppercase;
+.nsub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.nsub-btn{
+  padding:18px 12px;border-radius:17px;
+  border:1.5px solid rgba(232,9,26,.2);
+  background:rgba(232,9,26,.04);
+  cursor:pointer;text-align:center;user-select:none;
+  position:relative;overflow:hidden;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
 }
+.nsub-btn:hover{border-color:var(--nred);background:rgba(232,9,26,.09);transform:translateY(-3px);box-shadow:0 9px 28px var(--nglow);}
+.nsub-btn.sel{border-color:var(--nred);background:rgba(232,9,26,.1);transform:translateY(-3px);box-shadow:0 9px 28px var(--nglow);}
+.nsub-icon{font-size:28px;margin-bottom:8px;display:block;}
+.nsub-name{font-size:12px;font-weight:800;color:var(--text);}
+.nsub-desc{font-size:10px;color:var(--muted);font-weight:500;margin-top:3px;}
 
-/* ── NETFLIX SUBTYPE ── */
-.netflix-sub {
-  display: none; margin-top: 16px;
-  opacity: 0; transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+/* ═══════════════════════════════════════
+   DIVIDER
+═══════════════════════════════════════ */
+.fdiv{
+  display:flex;align-items:center;gap:12px;
+  margin:22px 0 18px;
+  opacity:0;transform:translateY(6px);transition:all .5s ease;
 }
-.netflix-sub.show { opacity: 1; transform: translateY(0); display: block; }
-
-.sub-heading {
-  font-size: 10px; font-weight: 700;
-  color: var(--netflix2); letter-spacing: 2px;
-  text-transform: uppercase; text-align: center;
-  margin-bottom: 12px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.sub-heading::before, .sub-heading::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(229,9,20,0.3));
-}
-.sub-heading::after { background: linear-gradient(90deg, rgba(229,9,20,0.3), transparent); }
-
-.sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.sub-btn {
-  padding: 16px 12px;
-  border-radius: 16px;
-  border: 1.5px solid rgba(229,9,20,0.2);
-  background: rgba(229,9,20,0.04);
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  user-select: none;
-  position: relative; overflow: hidden;
-}
-.sub-btn:hover {
-  border-color: var(--netflix);
-  background: rgba(229,9,20,0.08);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px var(--nglow);
-}
-.sub-btn.sel {
-  border-color: var(--netflix);
-  background: rgba(229,9,20,0.1);
-  box-shadow: 0 8px 24px var(--nglow);
-  transform: translateY(-3px);
-}
-.sub-icon { font-size: 26px; margin-bottom: 8px; display: block; }
-.sub-name { font-size: 12px; font-weight: 800; color: var(--text); }
-.sub-desc { font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
-
-/* ── DIVIDER ── */
-.fancy-div {
-  display: flex; align-items: center; gap: 12px;
-  margin: 20px 0 18px;
-  opacity: 0; transform: translateY(6px);
-  transition: all 0.5s ease;
-}
-.fancy-div.show { opacity: 1; transform: translateY(0); }
-.div-line { flex: 1; height: 1px; background: var(--border2); }
-.div-pill {
-  padding: 5px 14px;
-  background: rgba(79,142,255,0.08);
-  border: 1px solid rgba(79,142,255,0.2);
-  border-radius: 30px;
-  font-size: 10px; font-weight: 700;
-  color: var(--accent2); letter-spacing: 1px;
-  text-transform: uppercase;
+.fdiv.show{opacity:1;transform:translateY(0);}
+.dline{flex:1;height:1px;background:var(--border2);}
+.dpill{
+  padding:5px 14px;
+  background:rgba(74,143,255,.07);border:1px solid rgba(74,143,255,.18);
+  border-radius:30px;font-size:10px;font-weight:700;
+  color:var(--acc2);letter-spacing:1.5px;text-transform:uppercase;
 }
 
-/* ── INPUT ── */
-.form-row {
-  opacity: 0; transform: translateY(8px);
-  transition: all 0.5s ease;
+/* ═══════════════════════════════════════
+   INPUT
+═══════════════════════════════════════ */
+.frow{opacity:0;transform:translateY(8px);transition:all .5s ease;}
+.frow.show{opacity:1;transform:translateY(0);}
+.flbl{
+  font-size:11px;font-weight:700;color:var(--text2);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
 }
-.form-row.show { opacity: 1; transform: translateY(0); }
-
-.field-lbl {
-  font-size: 11px; font-weight: 700;
-  color: var(--text2); text-transform: uppercase;
-  letter-spacing: 1.5px; margin-bottom: 10px;
-  display: flex; align-items: center; gap: 6px;
+.inp-wrap{position:relative;}
+.inp-ic{
+  position:absolute;left:18px;top:50%;transform:translateY(-50%);
+  font-size:16px;pointer-events:none;transition:all .3s;
+  color:var(--muted);
 }
-
-.input-wrap { position: relative; }
-.input-icon {
-  position: absolute; left: 18px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted); font-size: 16px;
-  pointer-events: none; transition: color 0.3s;
+input[type="email"]{
+  width:100%;padding:17px 18px 17px 52px;
+  background:var(--s3);border:1.5px solid var(--border2);
+  border-radius:16px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;font-weight:500;color:var(--text);
+  outline:none;transition:all .3s;
+  -webkit-text-fill-color:var(--text);
 }
-input[type="email"] {
-  width: 100%;
-  padding: 16px 18px 16px 50px;
-  background: var(--surface2);
-  border: 1.5px solid var(--border2);
-  border-radius: 16px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 15px; font-weight: 500;
-  color: var(--text); outline: none;
-  transition: all 0.3s ease;
-  -webkit-text-fill-color: var(--text);
+input:focus{
+  border-color:var(--acc);
+  background:rgba(74,143,255,.05);
+  box-shadow:0 0 0 4px rgba(74,143,255,.12);
 }
-input[type="email"]:focus {
-  border-color: var(--accent);
-  background: rgba(79,142,255,0.05);
-  box-shadow: 0 0 0 4px rgba(79,142,255,0.1);
+input:focus + .inp-ic{color:var(--acc2);}
+input::placeholder{color:var(--muted);}
+/* Invalid state */
+input.invalid{
+  border-color:var(--nred) !important;
+  background:rgba(232,9,26,.04) !important;
+  box-shadow:0 0 0 4px rgba(232,9,26,.12) !important;
 }
-input[type="email"]:focus + .input-icon,
-.input-wrap:focus-within .input-icon { color: var(--accent2); }
-input::placeholder { color: var(--muted); }
-
-body.svc-netflix input[type="email"]:focus {
-  border-color: var(--netflix);
-  background: rgba(229,9,20,0.04);
-  box-shadow: 0 0 0 4px var(--nglow);
+body.sn input[type="email"]:focus{
+  border-color:var(--nred);background:rgba(232,9,26,.04);
+  box-shadow:0 0 0 4px rgba(232,9,26,.12);
 }
-body.svc-disney input[type="email"]:focus {
-  border-color: var(--disney);
-  background: rgba(26,111,255,0.04);
-  box-shadow: 0 0 0 4px var(--dglow);
+body.sd input[type="email"]:focus{
+  border-color:var(--dblue);background:rgba(26,112,255,.04);
+  box-shadow:0 0 0 4px rgba(26,112,255,.12);
 }
 
-/* ── BUTTON ── */
-.btn-go {
-  width: 100%; margin-top: 14px;
-  padding: 18px;
-  border: none; border-radius: 16px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 15px; font-weight: 800;
-  cursor: pointer; position: relative; overflow: hidden;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  opacity: 0; transform: translateY(8px);
-  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s;
-  color: white; letter-spacing: 0.3px;
-  background: linear-gradient(135deg, var(--accent) 0%, #6fa8ff 100%);
-  box-shadow: 0 8px 32px rgba(79,142,255,0.4), 0 0 0 1px rgba(255,255,255,0.1) inset;
+/* ── Email invalid error msg ── */
+.err-email-msg{
+  display:none;
+  margin-top:10px;padding:11px 16px;
+  background:rgba(232,9,26,.09);
+  border-left:3px solid var(--nred);
+  border-radius:0 12px 12px 0;
+  font-size:13px;font-weight:700;color:var(--nred2);
+  line-height:1.4;
+  animation:shakeX .4s ease;
 }
-.btn-go.show { opacity: 1; transform: translateY(0); }
-.btn-go::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-  opacity: 0; transition: opacity 0.2s;
-}
-.btn-go:hover::before { opacity: 1; }
-.btn-go:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(79,142,255,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
-}
-.btn-go:active { transform: scale(0.99); }
+.err-email-msg span{display:block;font-size:11px;font-weight:500;color:rgba(255,80,96,.65);margin-top:3px;}
 
-body.svc-netflix .btn-go {
-  background: linear-gradient(135deg, #e50914 0%, #ff6b6b 100%);
-  box-shadow: 0 8px 32px var(--nglow), 0 0 0 1px rgba(255,255,255,0.08) inset;
+/* ═══════════════════════════════════════
+   BUTTON
+═══════════════════════════════════════ */
+.btn-go{
+  width:100%;margin-top:14px;padding:19px;
+  border:none;border-radius:16px;
+  font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;
+  cursor:pointer;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s,transform .5s,box-shadow .3s;
+  color:#fff;letter-spacing:.4px;
 }
-body.svc-netflix .btn-go:hover { box-shadow: 0 14px 40px rgba(229,9,20,0.5), 0 0 0 1px rgba(255,255,255,0.08) inset; }
-
-body.svc-disney .btn-go {
-  background: linear-gradient(135deg, #1a4fff 0%, #5ba3ff 100%);
-  box-shadow: 0 8px 32px var(--dglow), 0 0 0 1px rgba(255,255,255,0.08) inset;
+.btn-go.show{opacity:1;transform:translateY(0);}
+.btn-go::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.13),transparent);
+  opacity:0;transition:opacity .2s;
 }
-body.svc-disney .btn-go:hover { box-shadow: 0 14px 40px rgba(26,111,255,0.5), 0 0 0 1px rgba(255,255,255,0.08) inset; }
-
-.btn-go-arrow { font-size: 18px; transition: transform 0.3s; }
-.btn-go:hover .btn-go-arrow { transform: translateX(5px); }
-
-.spin { display: none; width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
-.btn-go.loading .btn-txt { display: none; }
-.btn-go.loading .btn-go-arrow { display: none; }
-.btn-go.loading .spin { display: block; }
-
-/* ── ERROR ── */
-.err-box {
-  display: none; margin-top: 12px; padding: 12px 16px;
-  background: rgba(229,9,20,0.08); border: 1px solid rgba(229,9,20,0.25);
-  border-radius: 12px; font-size: 13px; font-weight: 600;
-  color: #ff6b6b; text-align: center;
-  animation: shake 0.4s ease;
+.btn-go:hover::before{opacity:1;}
+.btn-go:hover{transform:translateY(-2px);}
+.btn-go:active{transform:scale(.99);}
+/* Sweep shine */
+.btn-go::after{
+  content:'';position:absolute;top:0;left:-100%;
+  width:55%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
+  transition:left .65s;
 }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.btn-go:hover::after{left:160%;}
 
-/* ── RESULT ── */
-.result-wrap {
-  display: none; flex-direction: column; align-items: center;
-  text-align: center;
-  animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+/* Default blue */
+body:not(.sn):not(.sd) .btn-go{
+  background:linear-gradient(135deg,var(--acc) 0%,#70aaff 100%);
+  box-shadow:0 8px 34px var(--aglow), 0 0 0 1px rgba(255,255,255,.08) inset;
 }
+body:not(.sn):not(.sd) .btn-go:hover{box-shadow:0 14px 44px rgba(74,143,255,.55);}
+/* Netflix red */
+body.sn .btn-go{
+  background:linear-gradient(135deg,#e8091a 0%,#ff5565 100%);
+  box-shadow:0 8px 34px var(--nglow), 0 0 0 1px rgba(255,255,255,.07) inset;
+}
+body.sn .btn-go:hover{box-shadow:0 14px 44px rgba(232,9,26,.58);}
+/* Disney blue */
+body.sd .btn-go{
+  background:linear-gradient(135deg,#1a50ff 0%,#60aaff 100%);
+  box-shadow:0 8px 34px var(--dglow), 0 0 0 1px rgba(255,255,255,.07) inset;
+}
+body.sd .btn-go:hover{box-shadow:0 14px 44px rgba(26,112,255,.58);}
 
-.result-hero {
-  width: 100px; height: 100px;
-  margin-bottom: 20px;
-  animation: baymaxFloat 3s ease-in-out infinite;
-  filter: drop-shadow(0 8px 24px rgba(79,142,255,0.3));
-}
+.go-arr{font-size:20px;transition:transform .3s;}
+.btn-go:hover .go-arr{transform:translateX(6px);}
+.go-spin{display:none;width:22px;height:22px;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+.btn-go.loading .go-txt,.btn-go.loading .go-arr{display:none;}
+.btn-go.loading .go-spin{display:block;}
 
-.result-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 28px; font-weight: 900;
-  letter-spacing: -0.5px; margin-bottom: 6px;
-  background: linear-gradient(135deg, var(--text), var(--text2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+/* ── General error box ── */
+.err-box{
+  display:none;margin-top:12px;padding:12px 16px;
+  background:rgba(232,9,26,.08);border:1px solid rgba(232,9,26,.28);
+  border-radius:12px;font-size:13px;font-weight:700;
+  color:var(--nred2);text-align:center;
+  animation:shakeX .4s ease;
 }
-.result-sub {
-  font-size: 13px; color: var(--muted); font-weight: 500;
-  max-width: 300px; line-height: 1.6; margin-bottom: 24px;
-}
+@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-/* Result boxes */
-.result-box {
-  width: 100%; border-radius: 20px; padding: 24px;
-  margin-bottom: 16px; position: relative; overflow: hidden;
-}
-.result-box::before {
-  content: ''; position: absolute; inset: 0; border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent);
+/* ═══════════════════════════════════════
+   RESULT STATE
+═══════════════════════════════════════ */
+.result{
+  display:none;flex-direction:column;align-items:center;
+  text-align:center;
+  animation:slideUp .7s cubic-bezier(.22,1,.36,1) both;
 }
 
-.box-netflix {
-  background: rgba(229,9,20,0.07);
-  border: 1.5px solid rgba(229,9,20,0.25);
-  box-shadow: 0 8px 32px rgba(229,9,20,0.1);
+.res-bx{
+  width:100px;height:110px;margin-bottom:20px;
+  animation:bxFloat2 3.5s ease-in-out infinite;
+  filter:drop-shadow(0 8px 28px rgba(0,229,160,.32));
 }
-.box-disney {
-  background: rgba(26,111,255,0.07);
-  border: 1.5px solid rgba(26,111,255,0.25);
-  box-shadow: 0 8px 32px rgba(26,111,255,0.1);
-}
-
-.box-label {
-  font-size: 10px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 2px;
-  margin-bottom: 14px;
-  display: flex; align-items: center; gap: 6px; justify-content: center;
-}
-.box-netflix .box-label { color: var(--netflix2); }
-.box-disney  .box-label { color: var(--disney2); }
-
-/* Code display */
-.code-display {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 900; letter-spacing: 10px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px; padding: 18px;
-  margin-bottom: 12px;
-}
-.code-4  { font-size: 52px; color: var(--netflix2); text-shadow: 0 0 30px rgba(229,9,20,0.4); }
-.code-6  { font-size: 44px; color: var(--disney2);  text-shadow: 0 0 30px rgba(26,111,255,0.4); }
-
-/* Link display */
-.link-display {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px; padding: 12px 14px;
-  font-size: 11px; color: var(--text2);
-  word-break: break-all; line-height: 1.5;
-  margin-bottom: 14px; text-align: left;
-  max-height: 72px; overflow: hidden;
+@keyframes bxFloat2{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
 }
 
-.btn-open {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, #e50914, #c00);
-  border: none; border-radius: 12px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px; font-weight: 800; color: white;
-  cursor: pointer; text-decoration: none;
-  transition: all 0.3s;
-  box-shadow: 0 6px 24px var(--nglow);
+.res-title{
+  font-family:'Outfit',sans-serif;font-size:28px;font-weight:900;
+  letter-spacing:-.5px;margin-bottom:6px;
+  background:linear-gradient(135deg,var(--text),var(--text2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.btn-open:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(229,9,20,0.45); }
+.res-sub{font-size:13px;color:var(--muted);font-weight:500;max-width:320px;line-height:1.65;margin-bottom:24px;}
 
-.expire-note {
-  font-size: 11px; color: var(--muted); font-weight: 500;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
+.res-box{width:100%;border-radius:20px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden;}
+.res-box::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);}
+.rbox-n{background:rgba(232,9,26,.07);border:1.5px solid rgba(232,9,26,.24);box-shadow:0 8px 36px rgba(232,9,26,.1);}
+.rbox-d{background:rgba(26,112,255,.07);border:1.5px solid rgba(26,112,255,.24);box-shadow:0 8px 36px rgba(26,112,255,.1);}
+
+.rbox-lbl{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:2px;margin-bottom:16px;
+  display:flex;align-items:center;gap:6px;justify-content:center;
 }
+.rbox-n .rbox-lbl{color:var(--nred2);}
+.rbox-d .rbox-lbl{color:var(--dblue2);}
 
-.expire-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 18px;
-  background: rgba(245,200,66,0.08);
-  border: 1px solid rgba(245,200,66,0.2);
-  border-radius: 30px; margin-bottom: 20px;
-  font-size: 12px; font-weight: 600; color: var(--gold);
+.code-disp{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:20px 16px;margin-bottom:12px;
 }
+.c4{font-size:56px;letter-spacing:12px;color:var(--nred2);text-shadow:0 0 40px rgba(232,9,26,.55);}
+.c6{font-size:48px;letter-spacing:10px;color:var(--dblue2);text-shadow:0 0 40px rgba(26,112,255,.55);}
 
-.btn-back {
-  padding: 12px 28px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border2);
-  border-radius: 30px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px; font-weight: 700; color: var(--text2);
-  cursor: pointer; transition: all 0.3s;
-  backdrop-filter: blur(10px);
+.link-disp{
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;padding:12px 14px;
+  font-size:11px;color:var(--text2);
+  word-break:break-all;line-height:1.55;
+  margin-bottom:14px;text-align:left;
+  max-height:72px;overflow:hidden;
 }
-.btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--border2); color: var(--text); transform: translateY(-1px); }
-
-/* ── FOOTER ── */
-.footer-area {
-  margin-top: 28px; text-align: center;
-  animation: fadeUp 0.9s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+.btn-open{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,#e8091a,#c20012);
+  border:none;border-radius:13px;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff;
+  cursor:pointer;text-decoration:none;
+  transition:all .3s;box-shadow:0 6px 26px var(--nglow);
 }
-.footer-links { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
-.f-link {
-  display: flex; align-items: center; gap: 6px;
-  padding: 9px 18px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border2);
-  border-radius: 30px; backdrop-filter: blur(10px);
-  font-size: 12px; font-weight: 600; color: var(--text2);
-  text-decoration: none; transition: all 0.3s;
+.btn-open:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(232,9,26,.52);}
+
+.exp-note{font-size:11px;color:var(--muted);font-weight:500;display:flex;align-items:center;justify-content:center;gap:4px;}
+.exp-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 20px;
+  background:rgba(245,194,24,.07);border:1px solid rgba(245,194,24,.2);
+  border-radius:30px;margin-bottom:22px;
+  font-size:12px;font-weight:600;color:var(--gold);
 }
-.f-link:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); color: var(--text); transform: translateY(-2px); }
-
-.trust-bar { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
-.trust-item { font-size: 11px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-
-.copy { margin-top: 18px; font-size: 11px; color: var(--muted); font-weight: 500; }
-.copy strong {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  font-weight: 700;
+.btn-back{
+  padding:12px 30px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border2);
+  border-radius:30px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text2);cursor:pointer;transition:all .3s;
+  backdrop-filter:blur(12px);
 }
+.btn-back:hover{background:rgba(255,255,255,.09);color:var(--text);transform:translateY(-1px);}
 
-/* ── ANIMS ── */
-@keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
-@keyframes spin     { to{transform:rotate(360deg)} }
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer{
+  margin-top:30px;text-align:center;
+  animation:slideUp 1s .3s cubic-bezier(.22,1,.36,1) both;
+}
+.foot-links{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
+.flink{
+  display:flex;align-items:center;gap:6px;
+  padding:9px 20px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border2);
+  border-radius:30px;backdrop-filter:blur(12px);
+  font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;
+  transition:all .3s;
+}
+.flink:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:var(--text);transform:translateY(-2px);}
+.trust{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:20px;flex-wrap:wrap;}
+.trust-i{font-size:11px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.copy{margin-top:16px;font-size:11px;color:var(--muted);}
+.copy b{background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;}
 
-/* ── MOBILE ── */
-@media (max-width: 540px) {
-  .card { padding: 26px 20px; }
-  .services-grid, .sub-grid { gap: 10px; }
-  .svc-card { padding: 18px 12px; }
-  .baymax-svg, .baymax-wrap { width: 90px; height: 90px; }
-  .code-4 { font-size: 40px; letter-spacing: 6px; }
-  .code-6 { font-size: 34px; letter-spacing: 5px; }
-  .brand-name { font-size: 36px; }
+/* ═══════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════ */
+@keyframes slideDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:550px){
+  .card{padding:26px 20px;}
+  .svc-grid,.nsub-grid{gap:10px;}
+  .svc{padding:18px 10px;}
+  .c4{font-size:44px;letter-spacing:8px;}
+  .c6{font-size:38px;letter-spacing:7px;}
+  .brand{font-size:38px;}
+  .bx-svg{width:120px;height:128px;}
+  .bx-stage{width:150px;height:160px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Background scene -->
-<div class="bg-scene">
-  <div class="bg-grid"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <!-- Particles -->
-  <div class="particle" style="left:15%;animation-duration:8s;animation-delay:0s;"></div>
-  <div class="particle" style="left:30%;animation-duration:12s;animation-delay:2s;width:3px;height:3px;"></div>
-  <div class="particle" style="left:60%;animation-duration:10s;animation-delay:5s;"></div>
-  <div class="particle" style="left:75%;animation-duration:9s;animation-delay:1s;width:3px;height:3px;"></div>
-  <div class="particle" style="left:45%;animation-duration:14s;animation-delay:7s;"></div>
-  <div class="particle" style="left:85%;animation-duration:11s;animation-delay:3s;"></div>
-</div>
+<!-- ── CANVAS STARFIELD ── -->
+<canvas id="canvas-bg"></canvas>
+<div class="nebula neb1"></div>
+<div class="nebula neb2"></div>
+<div class="nebula neb3"></div>
 
-<div class="wrapper">
+<div class="page">
 
-  <!-- HEADER -->
+  <!-- ══ HEADER ══ -->
   <div class="header">
-    <div class="baymax-wrap">
-      <div class="baymax-glow"></div>
-      <!-- Baymax SVG profesional -->
-      <svg class="baymax-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shadow -->
-        <ellipse cx="60" cy="112" rx="28" ry="5" fill="rgba(0,0,0,0.3)"/>
-        <!-- Body -->
-        <rect x="24" y="52" width="72" height="52" rx="28" fill="white"/>
-        <!-- Body shading -->
-        <rect x="24" y="52" width="72" height="26" rx="28" fill="rgba(220,230,255,0.3)"/>
-        <!-- Body bottom rounded -->
-        <rect x="24" y="72" width="72" height="32" rx="0" fill="white"/>
-        <rect x="24" y="88" width="72" height="16" rx="12" fill="white"/>
-        <!-- Chest line -->
-        <rect x="57" y="62" width="6" height="32" rx="3" fill="rgba(150,160,200,0.25)"/>
-        <!-- Head -->
-        <ellipse cx="60" cy="42" rx="30" ry="28" fill="white"/>
-        <!-- Head shading top -->
-        <ellipse cx="60" cy="32" rx="22" ry="14" fill="rgba(220,230,255,0.2)"/>
-        <!-- Eyes background -->
-        <rect x="30" y="34" width="26" height="16" rx="8" fill="#1a1f3d"/>
-        <rect x="64" y="34" width="26" height="16" rx="8" fill="#1a1f3d"/>
-        <!-- Eyes glow -->
-        <rect x="30" y="34" width="26" height="16" rx="8" fill="url(#eyeGradL)" opacity="0.8"/>
-        <rect x="64" y="34" width="26" height="16" rx="8" fill="url(#eyeGradR)" opacity="0.8"/>
-        <!-- Eye inner lights -->
-        <ellipse cx="43" cy="42" rx="8" ry="5" fill="#4f8eff"/>
-        <ellipse cx="77" cy="42" rx="8" ry="5" fill="#4f8eff"/>
-        <!-- Eye shine -->
-        <circle cx="47" cy="39" r="2" fill="rgba(255,255,255,0.8)"/>
-        <circle cx="81" cy="39" r="2" fill="rgba(255,255,255,0.8)"/>
-        <!-- Mouth line -->
-        <path d="M 48 54 Q 60 58 72 54" stroke="rgba(100,120,180,0.4)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        <!-- Arms -->
-        <ellipse cx="18" cy="72" rx="10" ry="16" fill="white"/>
-        <ellipse cx="102" cy="72" rx="10" ry="16" fill="white"/>
-        <!-- Arm shading -->
-        <ellipse cx="18" cy="72" rx="7" ry="12" fill="rgba(220,230,255,0.2)"/>
-        <ellipse cx="102" cy="72" rx="7" ry="12" fill="rgba(220,230,255,0.2)"/>
-        <!-- Legs -->
-        <rect x="36" y="98" width="20" height="18" rx="10" fill="white"/>
-        <rect x="64" y="98" width="20" height="18" rx="10" fill="white"/>
-        <!-- Belly button / center dot -->
-        <circle cx="60" cy="78" r="4" fill="rgba(79,142,255,0.3)" stroke="rgba(79,142,255,0.4)" stroke-width="1"/>
-        <!-- Gradients -->
+
+    <!-- Baymax Stage -->
+    <div class="bx-stage">
+      <div class="bx-halo bx-halo2"></div>
+      <div class="bx-halo bx-halo1"></div>
+      <div class="bx-plat"></div>
+
+      <!-- ════════════════════════════════════
+           BAYMAX SVG — Ultra Detailed
+      ════════════════════════════════════ -->
+      <svg class="bx-svg" viewBox="0 0 150 160" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="eyeGradL" x1="30" y1="34" x2="56" y2="50" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#4f8eff" stop-opacity="0.3"/>
-            <stop offset="100%" stop-color="#1a1f3d" stop-opacity="0"/>
+          <!-- Main body gradient - white robot with blue tint -->
+          <radialGradient id="G_body" cx="38%" cy="25%" r="72%">
+            <stop offset="0%"   stop-color="#ffffff"/>
+            <stop offset="45%"  stop-color="#edf2ff"/>
+            <stop offset="80%"  stop-color="#d8e4f8"/>
+            <stop offset="100%" stop-color="#c2d0ee"/>
+          </radialGradient>
+          <radialGradient id="G_head" cx="36%" cy="22%" r="70%">
+            <stop offset="0%"   stop-color="#ffffff"/>
+            <stop offset="40%"  stop-color="#f0f4ff"/>
+            <stop offset="75%"  stop-color="#dce8ff"/>
+            <stop offset="100%" stop-color="#c5d5f5"/>
+          </radialGradient>
+          <radialGradient id="G_arm" cx="30%" cy="20%" r="75%">
+            <stop offset="0%"   stop-color="#f8faff"/>
+            <stop offset="100%" stop-color="#c4d4f0"/>
+          </radialGradient>
+          <radialGradient id="G_leg" cx="40%" cy="20%" r="70%">
+            <stop offset="0%"   stop-color="#edf2ff"/>
+            <stop offset="100%" stop-color="#c0d0ec"/>
+          </radialGradient>
+          <!-- Eye iris glow -->
+          <radialGradient id="G_eye" cx="50%" cy="45%" r="55%">
+            <stop offset="0%"   stop-color="#90c8ff"/>
+            <stop offset="40%"  stop-color="#4a8fff"/>
+            <stop offset="80%"  stop-color="#1a4fd0"/>
+            <stop offset="100%" stop-color="#0d2e90"/>
+          </radialGradient>
+          <!-- Eye outer rim -->
+          <radialGradient id="G_erim" cx="50%" cy="30%" r="60%">
+            <stop offset="0%"  stop-color="#2a60e0" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <!-- Chest line gradient -->
+          <linearGradient id="G_chest" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="rgba(140,180,240,0.55)"/>
+            <stop offset="60%"  stop-color="rgba(140,180,240,0.2)"/>
+            <stop offset="100%" stop-color="rgba(140,180,240,0)"/>
           </linearGradient>
-          <linearGradient id="eyeGradR" x1="64" y1="34" x2="90" y2="50" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#4f8eff" stop-opacity="0.3"/>
-            <stop offset="100%" stop-color="#1a1f3d" stop-opacity="0"/>
-          </linearGradient>
+          <!-- Soft shadow filter -->
+          <filter id="F_shadow" x="-25%" y="-20%" width="150%" height="150%">
+            <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="rgba(0,0,80,.35)"/>
+          </filter>
+          <filter id="F_shadow_sm">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,80,.25)"/>
+          </filter>
+          <filter id="F_glow_eye">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <!-- Highlight gradient for top of head/body -->
+          <radialGradient id="G_hl" cx="45%" cy="10%" r="55%">
+            <stop offset="0%"  stop-color="rgba(255,255,255,0.75)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
         </defs>
+
+        <!-- ── Ground shadow ── -->
+        <ellipse cx="75" cy="156" rx="34" ry="5.5" fill="rgba(0,0,60,.28)"/>
+
+        <!-- ══ LEFT ARM ══ -->
+        <!-- Upper arm -->
+        <ellipse cx="15" cy="88" rx="13" ry="22"
+          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
+          transform="rotate(-10,15,88)"/>
+        <!-- Arm highlight -->
+        <ellipse cx="12" cy="80" rx="4" ry="8"
+          fill="rgba(255,255,255,0.52)"
+          transform="rotate(-10,12,80)"/>
+        <!-- Arm side shadow -->
+        <ellipse cx="18" cy="96" rx="5" ry="10"
+          fill="rgba(180,205,240,0.25)"
+          transform="rotate(-10,18,96)"/>
+        <!-- Wrist detail -->
+        <ellipse cx="14" cy="107" rx="9" ry="5"
+          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
+          transform="rotate(-10,14,107)"/>
+
+        <!-- ══ RIGHT ARM ══ -->
+        <ellipse cx="135" cy="88" rx="13" ry="22"
+          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
+          transform="rotate(10,135,88)"/>
+        <ellipse cx="132" cy="80" rx="4" ry="8"
+          fill="rgba(255,255,255,0.52)"
+          transform="rotate(10,132,80)"/>
+        <ellipse cx="138" cy="96" rx="5" ry="10"
+          fill="rgba(180,205,240,0.25)"
+          transform="rotate(10,138,96)"/>
+        <ellipse cx="136" cy="107" rx="9" ry="5"
+          fill="url(#G_arm)" filter="url(#F_shadow_sm)"
+          transform="rotate(10,136,107)"/>
+
+        <!-- ══ BODY ══ -->
+        <!-- Main body pill -->
+        <rect x="28" y="62" width="94" height="76" rx="34"
+          fill="url(#G_body)" filter="url(#F_shadow)"/>
+        <!-- Bottom cap -->
+        <rect x="28" y="108" width="94" height="30" rx="0" fill="url(#G_body)"/>
+        <rect x="28" y="118" width="94" height="20" rx="22" fill="url(#G_body)"/>
+        <!-- Body top highlight -->
+        <ellipse cx="75" cy="70" rx="36" ry="14" fill="url(#G_hl)"/>
+        <!-- Body left shadow -->
+        <rect x="28" y="62" width="20" height="76" rx="34"
+          fill="rgba(175,200,240,.18)"/>
+        <!-- Body right shadow -->
+        <rect x="102" y="62" width="20" height="76" rx="34"
+          fill="rgba(175,200,240,.15)"/>
+        <!-- Body bottom shadow line -->
+        <ellipse cx="75" cy="136" rx="42" ry="5" fill="rgba(170,195,235,.2)"/>
+
+        <!-- Chest center ridge -->
+        <rect x="72" y="73" width="6" height="55" rx="3" fill="url(#G_chest)"/>
+
+        <!-- ── Belly sensor ── -->
+        <circle cx="75" cy="98" r="8" fill="rgba(150,185,240,.18)" stroke="rgba(120,165,235,.35)" stroke-width="1.5"/>
+        <circle cx="75" cy="98" r="5" fill="rgba(74,143,255,.28)" stroke="rgba(100,160,255,.4)" stroke-width="1"/>
+        <circle cx="75" cy="98" r="2.5" fill="rgba(126,184,255,.85)"/>
+        <circle cx="75" cy="98" r="1" fill="rgba(200,230,255,.9)"/>
+
+        <!-- ══ NECK ══ -->
+        <rect x="57" y="76" width="36" height="12" rx="6"
+          fill="url(#G_body)"/>
+        <!-- Neck highlight -->
+        <rect x="60" y="77" width="30" height="5" rx="2.5"
+          fill="rgba(255,255,255,.35)"/>
+        <!-- Neck shadow -->
+        <rect x="57" y="83" width="36" height="5" rx="0"
+          fill="rgba(170,195,240,.18)"/>
+
+        <!-- ══ HEAD ══ -->
+        <ellipse cx="75" cy="46" rx="39" ry="38"
+          fill="url(#G_head)" filter="url(#F_shadow)"/>
+        <!-- Head top highlight dome -->
+        <ellipse cx="68" cy="22" rx="22" ry="14" fill="url(#G_hl)"/>
+        <!-- Head left shading -->
+        <ellipse cx="44" cy="46" rx="12" ry="32" fill="rgba(180,205,240,.2)"/>
+        <!-- Head right shading -->
+        <ellipse cx="106" cy="46" rx="12" ry="32" fill="rgba(180,205,240,.17)"/>
+        <!-- Head bottom shadow -->
+        <ellipse cx="75" cy="80" rx="35" ry="7" fill="rgba(170,195,235,.22)"/>
+
+        <!-- ══ EYE SOCKETS ══ -->
+        <!-- Left socket -->
+        <rect x="30" y="36" width="33" height="22" rx="11"
+          fill="#101628" rx="11"/>
+        <rect x="30" y="36" width="33" height="22" rx="11"
+          fill="rgba(5,10,40,.9)"/>
+        <!-- Right socket -->
+        <rect x="87" y="36" width="33" height="22" rx="11"
+          fill="#101628"/>
+        <rect x="87" y="36" width="33" height="22" rx="11"
+          fill="rgba(5,10,40,.9)"/>
+
+        <!-- Socket edge highlight top -->
+        <rect x="30" y="36" width="33" height="3" rx="1.5"
+          fill="rgba(255,255,255,.09)"/>
+        <rect x="87" y="36" width="33" height="3" rx="1.5"
+          fill="rgba(255,255,255,.09)"/>
+        <!-- Socket inner glow -->
+        <rect x="31" y="37" width="31" height="20" rx="10"
+          fill="url(#G_erim)" opacity=".45"/>
+        <rect x="88" y="37" width="31" height="20" rx="10"
+          fill="url(#G_erim)" opacity=".45"/>
+
+        <!-- ══ IRISES ══ -->
+        <!-- Left iris base -->
+        <ellipse cx="46.5" cy="47" rx="11.5" ry="8"
+          fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
+        <!-- Left iris depth -->
+        <ellipse cx="46.5" cy="47" rx="8" ry="5.5" fill="#1a4fd0"/>
+        <ellipse cx="46.5" cy="47" rx="5"   ry="3.5" fill="#0e2e90"/>
+        <!-- Left iris glow layer -->
+        <ellipse cx="46.5" cy="47" rx="11.5" ry="8"
+          fill="rgba(74,143,255,.35)"/>
+        <!-- Left iris rim light -->
+        <ellipse cx="46.5" cy="39.5" rx="10" ry="3"
+          fill="rgba(126,184,255,.3)"/>
+
+        <!-- Right iris base -->
+        <ellipse cx="103.5" cy="47" rx="11.5" ry="8"
+          fill="url(#G_eye)" filter="url(#F_glow_eye)"/>
+        <ellipse cx="103.5" cy="47" rx="8"   ry="5.5" fill="#1a4fd0"/>
+        <ellipse cx="103.5" cy="47" rx="5"   ry="3.5" fill="#0e2e90"/>
+        <ellipse cx="103.5" cy="47" rx="11.5" ry="8"
+          fill="rgba(74,143,255,.35)"/>
+        <ellipse cx="103.5" cy="39.5" rx="10" ry="3"
+          fill="rgba(126,184,255,.3)"/>
+
+        <!-- ── Specular highlights (eye shine) ── -->
+        <!-- Left eye: large shine -->
+        <circle cx="52" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
+        <!-- Left eye: small secondary -->
+        <circle cx="56" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
+        <!-- Left eye: tiny tertiary -->
+        <circle cx="41" cy="44" r="1.2" fill="rgba(200,225,255,.5)"/>
+        <!-- Right eye: large shine -->
+        <circle cx="109" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
+        <circle cx="113" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
+        <circle cx="98"  cy="44" r="1.2" fill="rgba(200,225,255,.5)"/>
+
+        <!-- ── Eye socket edge glow (blue LED feel) ── -->
+        <rect x="30" y="55" width="33" height="3" rx="1.5"
+          fill="rgba(74,143,255,.2)"/>
+        <rect x="87" y="55" width="33" height="3" rx="1.5"
+          fill="rgba(74,143,255,.2)"/>
+
+        <!-- ══ MOUTH ══ -->
+        <!-- Mouth line soft -->
+        <path d="M 57 65 Q 75 71 93 65"
+          stroke="rgba(140,175,230,.55)" stroke-width="2"
+          stroke-linecap="round" fill="none"/>
+        <!-- Mouth slight smile shadow -->
+        <path d="M 60 66 Q 75 70 90 66"
+          stroke="rgba(200,220,250,.2)" stroke-width="1"
+          stroke-linecap="round" fill="none"/>
+
+        <!-- ══ LEGS ══ -->
+        <!-- Left leg -->
+        <rect x="42" y="128" width="24" height="24" rx="12"
+          fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
+        <ellipse cx="54" cy="130" rx="9" ry="4.5"
+          fill="rgba(255,255,255,.42)"/>
+        <!-- Left leg shadow -->
+        <ellipse cx="54" cy="150" rx="10" ry="3"
+          fill="rgba(170,195,240,.22)"/>
+
+        <!-- Right leg -->
+        <rect x="84" y="128" width="24" height="24" rx="12"
+          fill="url(#G_leg)" filter="url(#F_shadow_sm)"/>
+        <ellipse cx="96" cy="130" rx="9" ry="4.5"
+          fill="rgba(255,255,255,.42)"/>
+        <ellipse cx="96" cy="150" rx="10" ry="3"
+          fill="rgba(170,195,240,.22)"/>
+
+        <!-- ── Leg joint lines ── -->
+        <rect x="48" y="124" width="12" height="6" rx="3"
+          fill="rgba(180,205,240,.35)"/>
+        <rect x="90" y="124" width="12" height="6" rx="3"
+          fill="rgba(180,205,240,.35)"/>
       </svg>
-    </div>
+    </div><!-- /bx-stage -->
 
-    <div class="brand-lockup">
-      <div class="brand-name">BAYMAX <span class="zone">ZONE</span></div>
+    <div class="brand">BAYMAX <span class="z">ZONE</span></div>
+    <div class="tagline">Acceso instantáneo a <b>códigos</b></div>
+    <div class="chips">
+      <div class="chip"><span class="dot"></span> Servicio activo</div>
+      <div class="chip">⚡ Respuesta inmediata</div>
+      <div class="chip">🔒 100% seguro</div>
     </div>
-    <div class="brand-sub">Streaming Codes · Instant Access</div>
+  </div><!-- /header -->
 
-    <div class="status-bar">
-      <div class="status-chip"><span class="status-dot"></span> Servicio activo</div>
-      <div class="status-chip">⚡ Respuesta inmediata</div>
-      <div class="status-chip">🔒 100% seguro</div>
+  <!-- ══ STEPS ══ -->
+  <div class="steps">
+    <div class="si">
+      <div class="sn active" id="sn1">1</div>
+      <div class="sl active" id="sl1">Servicio</div>
     </div>
-  </div>
-
-  <!-- STEPS -->
-  <div class="steps-wrap">
-    <div class="step-item">
-      <div class="step-num active" id="sn1">1</div>
-      <div class="step-label active" id="sl1">Servicio</div>
+    <div class="sc"></div>
+    <div class="si">
+      <div class="sn" id="sn2">2</div>
+      <div class="sl" id="sl2">Correo</div>
     </div>
-    <div class="step-connector"></div>
-    <div class="step-item">
-      <div class="step-num" id="sn2">2</div>
-      <div class="step-label" id="sl2">Correo</div>
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-item">
-      <div class="step-num" id="sn3">3</div>
-      <div class="step-label" id="sl3">Código</div>
+    <div class="sc"></div>
+    <div class="si">
+      <div class="sn" id="sn3">3</div>
+      <div class="sl" id="sl3">Código</div>
     </div>
   </div>
 
-  <!-- CARD -->
-  <div class="card">
+  <!-- ══ CARD ══ -->
+  <div class="card-wrap">
+    <div class="card-glow"></div>
+    <div class="card">
+      <div class="card-inner-glow"></div>
+      <div class="cc tl"></div>
+      <div class="cc tr"></div>
+      <div class="cc bl"></div>
 
-    <!-- FORM STATE -->
-    <div id="formState">
-      <div class="card-label">
-        <div class="card-label-icon">📺</div>
-        <div class="card-label-text">
-          <h3>Selecciona tu servicio</h3>
-          <p>Elige la plataforma de tu cuenta</p>
-        </div>
-      </div>
-
-      <div class="services-grid">
-        <div class="svc-card svc-netflix" id="cardN" onclick="pickService('netflix')">
-          <div class="hot-tag">🔥 Popular</div>
-          <div class="svc-check">✓</div>
-          <div class="svc-logo logo-netflix">
-            <!-- N logo SVG -->
-            <svg width="32" height="36" viewBox="0 0 32 36" fill="none">
-              <path d="M2 2 L2 34 L10 28 L10 18 L22 34 L30 34 L30 2 L22 2 L22 18 L10 2 Z" fill="white"/>
-            </svg>
-          </div>
-          <div class="svc-name">Netflix</div>
-          <div class="svc-desc">Hogar · Inicio de sesión</div>
-        </div>
-
-        <div class="svc-card svc-disney" id="cardD" onclick="pickService('disney')">
-          <div class="svc-check">✓</div>
-          <div class="svc-logo logo-disney">
-            <!-- Disney castle simplified SVG -->
-            <svg width="38" height="36" viewBox="0 0 38 36" fill="none">
-              <rect x="16" y="22" width="6" height="12" rx="1" fill="white" opacity="0.9"/>
-              <rect x="8" y="26" width="8" height="8" rx="1" fill="white" opacity="0.8"/>
-              <rect x="22" y="26" width="8" height="8" rx="1" fill="white" opacity="0.8"/>
-              <polygon points="19,14 17,22 21,22" fill="white"/>
-              <polygon points="12,18 10,26 14,26" fill="white" opacity="0.9"/>
-              <polygon points="26,18 24,26 28,26" fill="white" opacity="0.9"/>
-              <circle cx="19" cy="12" r="2.5" fill="#f5c842"/>
-              <path d="M 6 34 Q 19 30 32 34" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
-            </svg>
-          </div>
-          <div class="svc-name">Disney+</div>
-          <div class="svc-desc">Código de acceso</div>
-        </div>
-      </div>
-
-      <!-- Netflix subtipo -->
-      <div class="netflix-sub" id="netflixSub">
-        <div class="sub-heading">¿Qué código necesitas?</div>
-        <div class="sub-grid">
-          <div class="sub-btn" id="btnH" onclick="pickNetflixType('netflix_hogar')">
-            <span class="sub-icon">🏠</span>
-            <div class="sub-name">Código Hogar</div>
-            <div class="sub-desc">Actualizar ubicación</div>
-          </div>
-          <div class="sub-btn" id="btnL" onclick="pickNetflixType('netflix_login')">
-            <span class="sub-icon">🔑</span>
-            <div class="sub-name">Inicio de Sesión</div>
-            <div class="sub-desc">Código 4 dígitos</div>
+      <!-- ══ FORM STATE ══ -->
+      <div id="formState">
+        <div class="chead">
+          <div class="cico" id="cico">📺</div>
+          <div class="ctxt">
+            <h3>Selecciona tu servicio</h3>
+            <p>Elige la plataforma de tu cuenta</p>
           </div>
         </div>
-      </div>
 
-      <!-- Divider -->
-      <div class="fancy-div" id="fdiv">
-        <div class="div-line"></div>
-        <div class="div-pill">✉ Tu correo de cuenta</div>
-        <div class="div-line"></div>
-      </div>
+        <!-- Services -->
+        <div class="svc-grid">
+          <div class="svc svc-n" id="cN" onclick="pickSvc('n')">
+            <div class="hot">🔥 Popular</div>
+            <div class="svc-chk">✓</div>
+            <div class="svc-logo logo-n">
+              <svg width="36" height="40" viewBox="0 0 36 40">
+                <path d="M2 2L2 38L12 31L12 20L24 38L34 38L34 2L24 2L24 20L12 2Z" fill="white"/>
+              </svg>
+            </div>
+            <div class="svc-name">Netflix</div>
+            <div class="svc-sub">Hogar · Inicio de sesión</div>
+          </div>
 
-      <!-- Email -->
-      <div class="form-row" id="frow">
-        <div class="field-lbl">📧 Correo registrado</div>
-        <div class="input-wrap">
-          <input type="email" id="emailIn" placeholder="tucuenta@gmail.com" autocomplete="email">
-          <span class="input-icon">✉</span>
+          <div class="svc svc-d" id="cD" onclick="pickSvc('d')">
+            <div class="svc-chk">✓</div>
+            <div class="svc-logo logo-d">
+              <svg width="44" height="40" viewBox="0 0 44 40" fill="none">
+                <rect x="19" y="23" width="6" height="15" rx="2" fill="white" opacity=".95"/>
+                <rect x="9"  y="27" width="10" height="11" rx="2" fill="white" opacity=".85"/>
+                <rect x="25" y="27" width="10" height="11" rx="2" fill="white" opacity=".85"/>
+                <polygon points="22,12 19,23 25,23" fill="white"/>
+                <polygon points="14,18 11,27 17,27" fill="white" opacity=".9"/>
+                <polygon points="30,18 27,27 33,27" fill="white" opacity=".9"/>
+                <circle cx="22" cy="10" r="3.5" fill="#f5c218"/>
+                <circle cx="22" cy="10" r="1.5" fill="white"/>
+              </svg>
+            </div>
+            <div class="svc-name">Disney+</div>
+            <div class="svc-sub">Código de acceso</div>
+          </div>
         </div>
-      </div>
 
-      <button class="btn-go" id="btnGo" onclick="doSubmit()">
-        <span class="btn-txt">Ver mi código</span>
-        <span class="btn-go-arrow">→</span>
-        <div class="spin"></div>
-      </button>
+        <!-- Netflix subtypes -->
+        <div class="nsub" id="nsub">
+          <div class="nsub-head">¿Qué código necesitas?</div>
+          <div class="nsub-grid">
+            <div class="nsub-btn" id="bH" onclick="pickNT('nh')">
+              <span class="nsub-icon">🏠</span>
+              <div class="nsub-name">Código Hogar</div>
+              <div class="nsub-desc">Código para el Hogar</div>
+            </div>
+            <div class="nsub-btn" id="bL" onclick="pickNT('nl')">
+              <span class="nsub-icon">🔑</span>
+              <div class="nsub-name">Inicio de Sesión</div>
+              <div class="nsub-desc">Código para entrar</div>
+            </div>
+          </div>
+        </div>
 
-      <div class="err-box" id="errBox"></div>
+        <!-- Divider -->
+        <div class="fdiv" id="fdiv">
+          <div class="dline"></div>
+          <div class="dpill">✉ Correo registrado</div>
+          <div class="dline"></div>
+        </div>
+
+        <!-- Input -->
+        <div class="frow" id="frow">
+          <div class="flbl">📧 Correo registrado</div>
+          <div class="inp-wrap">
+            <input type="email" id="emailIn" placeholder="tucuenta@gmail.com" autocomplete="email">
+            <span class="inp-ic">✉</span>
+          </div>
+          <!-- ── INVALID EMAIL ERROR ── -->
+          <div class="err-email-msg" id="errEmail">
+            ❌ Gmail incorrecto o no registrado
+            <span>Verifica el correo de tu cuenta y vuelve a intentarlo</span>
+          </div>
+        </div>
+
+        <button class="btn-go" id="btnGo" onclick="doSubmit()">
+          <span class="go-txt">Ver mi código</span>
+          <span class="go-arr">→</span>
+          <div class="go-spin"></div>
+        </button>
+
+        <div class="err-box" id="errBox"></div>
+      </div><!-- /formState -->
+
+      <!-- ══ RESULT STATE ══ -->
+      <div class="result" id="resultState">
+
+        <!-- Baymax happy (green eyes = success) -->
+        <svg class="res-bx" viewBox="0 0 150 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="RG_b" cx="38%" cy="25%" r="72%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="60%" stop-color="#edf2ff"/>
+              <stop offset="100%" stop-color="#c8d8f5"/>
+            </radialGradient>
+            <radialGradient id="RG_e" cx="50%" cy="40%" r="55%">
+              <stop offset="0%" stop-color="#80ffcc"/>
+              <stop offset="45%" stop-color="#00e5a0"/>
+              <stop offset="100%" stop-color="#008c60"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="75" cy="156" rx="30" ry="5" fill="rgba(0,229,160,.18)"/>
+          <ellipse cx="15" cy="88" rx="13" ry="22" fill="url(#RG_b)" transform="rotate(-10,15,88)"/>
+          <ellipse cx="135" cy="88" rx="13" ry="22" fill="url(#RG_b)" transform="rotate(10,135,88)"/>
+          <rect x="28" y="62" width="94" height="76" rx="34" fill="url(#RG_b)"/>
+          <rect x="28" y="108" width="94" height="30" rx="0" fill="url(#RG_b)"/>
+          <rect x="28" y="118" width="94" height="20" rx="22" fill="url(#RG_b)"/>
+          <ellipse cx="75" cy="70" rx="36" ry="14" fill="rgba(255,255,255,.38)"/>
+          <rect x="72" y="73" width="6" height="55" rx="3" fill="rgba(140,180,240,.3)"/>
+          <circle cx="75" cy="98" r="7" fill="rgba(0,229,160,.3)" stroke="rgba(0,229,160,.5)" stroke-width="1.5"/>
+          <circle cx="75" cy="98" r="3.5" fill="rgba(0,229,160,.85)"/>
+          <ellipse cx="75" cy="46" rx="39" ry="38" fill="url(#RG_b)"/>
+          <ellipse cx="68" cy="22" rx="22" ry="14" fill="rgba(255,255,255,.42)"/>
+          <rect x="57" y="76" width="36" height="12" rx="6" fill="url(#RG_b)"/>
+          <rect x="30" y="36" width="33" height="22" rx="11" fill="rgba(5,10,40,.9)"/>
+          <rect x="87" y="36" width="33" height="22" rx="11" fill="rgba(5,10,40,.9)"/>
+          <ellipse cx="46.5" cy="47" rx="11.5" ry="8" fill="url(#RG_e)"/>
+          <ellipse cx="46.5" cy="47" rx="7.5"  ry="5" fill="#00c488"/>
+          <ellipse cx="103.5" cy="47" rx="11.5" ry="8" fill="url(#RG_e)"/>
+          <ellipse cx="103.5" cy="47" rx="7.5"  ry="5" fill="#00c488"/>
+          <circle cx="52" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
+          <circle cx="56" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
+          <circle cx="109" cy="42" r="3.5" fill="rgba(255,255,255,.92)"/>
+          <circle cx="113" cy="46" r="1.8" fill="rgba(255,255,255,.6)"/>
+          <!-- Happy smile -->
+          <path d="M 57 64 Q 75 74 93 64" stroke="rgba(0,200,140,.7)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <rect x="42" y="128" width="24" height="24" rx="12" fill="url(#RG_b)"/>
+          <rect x="84" y="128" width="24" height="24" rx="12" fill="url(#RG_b)"/>
+        </svg>
+
+        <div class="res-title" id="rTitle">¡Aquí está tu código!</div>
+        <div class="res-sub"   id="rSub"></div>
+
+        <div class="res-box rbox-n" id="boxHogar" style="display:none">
+          <div class="rbox-lbl">🏠 Link de actualización de Hogar</div>
+          <div class="link-disp" id="rLink"></div>
+          <a class="btn-open" id="rBtn" href="#" target="_blank">🎬 Abrir y confirmar hogar</a>
+        </div>
+
+        <div class="res-box rbox-n" id="boxLogin" style="display:none">
+          <div class="rbox-lbl">🔑 Código de inicio de sesión</div>
+          <div class="code-disp c4" id="rCode4"></div>
+          <div class="exp-note">⏱ Expira pronto — úsalo ahora</div>
+        </div>
+
+        <div class="res-box rbox-d" id="boxDisney" style="display:none">
+          <div class="rbox-lbl">🏰 Código de acceso Disney+</div>
+          <div class="code-disp c6" id="rCode6"></div>
+          <div class="exp-note">⏱ Expira en 15 minutos</div>
+        </div>
+
+        <div class="exp-badge" style="margin-top:16px;">⚠️ Úsalo antes de que expire</div>
+        <button class="btn-back" onclick="resetAll()">← Consultar de nuevo</button>
+      </div><!-- /resultState -->
+
+    </div><!-- /card -->
+  </div><!-- /card-wrap -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="foot-links">
+      <a class="flink" id="waBtn"   href="#" target="_blank">💬 WhatsApp</a>
+      <a class="flink" id="mailBtn" href="#">📧 Soporte</a>
     </div>
-
-    <!-- RESULT STATE -->
-    <div class="result-wrap" id="resultState">
-      <!-- Baymax pequeño en resultado -->
-      <svg class="result-hero" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="112" rx="24" ry="4" fill="rgba(0,0,0,0.2)"/>
-        <rect x="26" y="54" width="68" height="50" rx="26" fill="white"/>
-        <rect x="26" y="54" width="68" height="24" rx="26" fill="rgba(220,230,255,0.25)"/>
-        <rect x="26" y="70" width="68" height="34" rx="0" fill="white"/>
-        <rect x="26" y="88" width="68" height="16" rx="12" fill="white"/>
-        <rect x="57" y="63" width="6" height="32" rx="3" fill="rgba(150,160,200,0.2)"/>
-        <ellipse cx="60" cy="42" rx="28" ry="26" fill="white"/>
-        <rect x="31" y="34" width="24" height="15" rx="7.5" fill="#1a1f3d"/>
-        <rect x="65" y="34" width="24" height="15" rx="7.5" fill="#1a1f3d"/>
-        <ellipse cx="43" cy="41" rx="7" ry="4.5" fill="#00d68f"/>
-        <ellipse cx="77" cy="41" rx="7" ry="4.5" fill="#00d68f"/>
-        <circle cx="47" cy="38" r="2" fill="rgba(255,255,255,0.9)"/>
-        <circle cx="81" cy="38" r="2" fill="rgba(255,255,255,0.9)"/>
-        <path d="M 49 53 Q 60 57 71 53" stroke="rgba(100,120,180,0.35)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        <ellipse cx="18" cy="73" rx="9" ry="15" fill="white"/>
-        <ellipse cx="102" cy="73" rx="9" ry="15" fill="white"/>
-        <rect x="37" y="98" width="18" height="16" rx="9" fill="white"/>
-        <rect x="65" y="98" width="18" height="16" rx="9" fill="white"/>
-        <circle cx="60" cy="79" r="3.5" fill="rgba(0,214,143,0.35)" stroke="rgba(0,214,143,0.5)" stroke-width="1"/>
-      </svg>
-
-      <div class="result-title" id="rTitle">¡Aquí está tu código!</div>
-      <div class="result-sub" id="rSub"></div>
-
-      <!-- Caja Netflix hogar -->
-      <div class="result-box box-netflix" id="boxHogar" style="display:none">
-        <div class="box-label">🏠 Link de actualización de Hogar</div>
-        <div class="link-display" id="rLink"></div>
-        <a class="btn-open" id="rLinkBtn" href="#" target="_blank">🎬 Abrir y confirmar hogar</a>
-      </div>
-
-      <!-- Caja Netflix login 4 dig -->
-      <div class="result-box box-netflix" id="boxLogin" style="display:none">
-        <div class="box-label">🔑 Código de inicio de sesión</div>
-        <div class="code-display code-4" id="rCode4"></div>
-        <div class="expire-note">⏱ Expira pronto — úsalo ya</div>
-      </div>
-
-      <!-- Caja Disney 6 dig -->
-      <div class="result-box box-disney" id="boxDisney" style="display:none">
-        <div class="box-label">🏰 Código de acceso Disney+</div>
-        <div class="code-display code-6" id="rCode6"></div>
-        <div class="expire-note">⏱ Expira en 15 minutos</div>
-      </div>
-
-      <div class="expire-badge" style="margin-top:16px;">⚠️ Úsalo antes de que expire</div>
-      <button class="btn-back" onclick="resetAll()">← Consultar de nuevo</button>
+    <div class="trust">
+      <div class="trust-i">⚡ Código inmediato</div>
+      <div class="trust-i">🛡️ Datos protegidos</div>
+      <div class="trust-i">🌐 Online 24/7</div>
     </div>
-
+    <div class="copy">© 2025 <b>Baymax Zone</b> — Todos los derechos reservados</div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="footer-area">
-    <div class="footer-links">
-      <a class="f-link" id="waBtn" href="#" target="_blank">💬 WhatsApp</a>
-      <a class="f-link" id="mailBtn" href="#">📧 Soporte</a>
-    </div>
-    <div class="trust-bar">
-      <div class="trust-item">⚡ Código inmediato</div>
-      <div class="trust-item">🛡️ Datos protegidos</div>
-      <div class="trust-item">🌐 24/7 Online</div>
-    </div>
-    <div class="copy">© 2025 <strong>Baymax Zone</strong> — Todos los derechos reservados</div>
-  </div>
+</div><!-- /page -->
 
-</div>
-
+<!-- ═══════════════════════════════════════
+     CANVAS STARFIELD SCRIPT
+═══════════════════════════════════════ -->
 <script>
-// ══════════════════════════════
-// CONFIG
-// ══════════════════════════════
-const API   = 'https://script.google.com/macros/s/AKfycbwi0358Ng_7drTnNovHHRFC9fZCiwvhh1mMGKAXSQMIK-t-OlFPk82ZEgqK2ZuD3kLwpQ/exec';
-const WA    = '51986165524';
-const MAIL  = 'jeffryperezhuallasco@gmail.com';
-// ══════════════════════════════
+(function(){
+  const c = document.getElementById('canvas-bg');
+  const ctx = c.getContext('2d');
+  let W, H, stars = [], shooters = [];
+
+  function resize(){
+    W = c.width  = window.innerWidth;
+    H = c.height = window.innerHeight;
+  }
+
+  function mkStar(){
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*1.4+0.2,
+      a: Math.random(), da: (Math.random()*0.006+0.002) * (Math.random()<.5?1:-1),
+      speed: Math.random()*0.04+0.01
+    };
+  }
+
+  function mkShooter(){
+    return {
+      x: Math.random()*W*0.7, y: Math.random()*H*0.4,
+      len: Math.random()*100+60,
+      speed: Math.random()*8+5,
+      angle: Math.PI/5 + Math.random()*0.3,
+      life: 0, maxLife: Math.random()*60+40,
+      a: 0
+    };
+  }
+
+  function init(){
+    resize();
+    stars = Array.from({length:220},mkStar);
+    shooters = [];
+    setInterval(()=>{ if(shooters.length<3) shooters.push(mkShooter()); }, 3500);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Stars
+    stars.forEach(s=>{
+      s.a += s.da;
+      if(s.a>1){s.a=1;s.da*=-1;}
+      if(s.a<0){s.a=0;s.da*=-1;}
+      s.y -= s.speed*0.05;
+      if(s.y<0) s.y=H;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,220,255,${s.a})`;
+      ctx.fill();
+    });
+
+    // Shooting stars
+    shooters.forEach((s,i)=>{
+      s.life++;
+      s.x += Math.cos(s.angle)*s.speed;
+      s.y += Math.sin(s.angle)*s.speed;
+      const p = s.life/s.maxLife;
+      s.a = p<0.15 ? p/0.15 : (p>0.7 ? 1-(p-0.7)/0.3 : 1);
+      const grad = ctx.createLinearGradient(
+        s.x,s.y,
+        s.x-Math.cos(s.angle)*s.len,
+        s.y-Math.sin(s.angle)*s.len
+      );
+      grad.addColorStop(0,`rgba(255,255,255,${s.a*0.95})`);
+      grad.addColorStop(0.4,`rgba(180,210,255,${s.a*0.5})`);
+      grad.addColorStop(1,'rgba(100,150,255,0)');
+      ctx.beginPath();
+      ctx.moveTo(s.x,s.y);
+      ctx.lineTo(s.x-Math.cos(s.angle)*s.len, s.y-Math.sin(s.angle)*s.len);
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+      if(s.life>=s.maxLife) shooters.splice(i,1);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',resize);
+  init();
+  draw();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════
+     APP LOGIC
+═══════════════════════════════════════ -->
+<script>
+/* ── CONFIG ── */
+const API  = 'https://script.google.com/macros/s/AKfycbwi0358Ng_7drTnNovHHRFC9fZCiwvhh1mMGKAXSQMIK-t-OlFPk82ZEgqK2ZuD3kLwpQ/exec';
+const WA   = '51986165524';
+const MAIL = 'jeffryperezhuallasco@gmail.com';
+
+/*
+ * CORREOS REGISTRADOS — Agrega aquí todos los correos de tus cuentas.
+ * Si dejas la lista VACÍA, se omite la validación local (útil mientras configuras).
+ */
+const CORREOS = [
+  /* Ejemplo:
+  'tucuenta1@gmail.com',
+  'tucuenta2@gmail.com',
+  */
+];
 
 document.getElementById('waBtn').href   = `https://wa.me/${WA}`;
 document.getElementById('mailBtn').href = `mailto:${MAIL}`;
 
 let svc = null;
 
-function pickService(s) {
-  document.body.className = 'svc-' + s;
-  document.getElementById('cardN').className = 'svc-card svc-netflix' + (s==='netflix'?' sel':'');
-  document.getElementById('cardD').className = 'svc-card svc-disney'  + (s==='disney' ?' sel':'');
+/* ─── Helpers ─── */
+function show(ids){ setTimeout(()=>ids.forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); }),80); }
+function hide(ids){ ids.forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); }); }
 
-  if (s === 'netflix') {
-    const sub = document.getElementById('netflixSub');
-    sub.style.display = 'block';
-    requestAnimationFrame(() => sub.classList.add('show'));
+function setStep(n){
+  for(let i=1;i<=3;i++){
+    const num=document.getElementById('sn'+i);
+    const lbl=document.getElementById('sl'+i);
+    if(i<n){       num.className='sn done';   num.textContent='✓'; lbl.className='sl'; }
+    else if(i===n){num.className='sn active'; num.textContent=i;   lbl.className='sl active'; }
+    else{          num.className='sn';        num.textContent=i;   lbl.className='sl'; }
+  }
+}
+
+/* ─── Email validation ─── */
+function emailIsRegistered(email){
+  if(!CORREOS.length) return true; // skip if list empty
+  return CORREOS.map(e=>e.toLowerCase().trim()).includes(email.toLowerCase().trim());
+}
+
+function showEmailErr(){
+  document.getElementById('errEmail').style.display='block';
+  const inp=document.getElementById('emailIn');
+  inp.classList.add('invalid');
+}
+function clearEmailErr(){
+  document.getElementById('errEmail').style.display='none';
+  document.getElementById('emailIn').classList.remove('invalid');
+}
+
+/* ─── Service selection ─── */
+function pickSvc(s){
+  document.body.className = s==='n'?'sn':'sd';
+  document.getElementById('cN').className='svc svc-n'+(s==='n'?' sel':'');
+  document.getElementById('cD').className='svc svc-d'+(s==='d'?' sel':'');
+  document.getElementById('cico').textContent = s==='n'?'🎬':'🏰';
+  clearEmailErr(); clearErr();
+
+  if(s==='n'){
+    const sub=document.getElementById('nsub');
+    sub.style.display='block';
+    requestAnimationFrame(()=>sub.classList.add('show'));
     hide(['fdiv','frow','btnGo']);
-    svc = null;
+    svc=null;
   } else {
-    const sub = document.getElementById('netflixSub');
+    const sub=document.getElementById('nsub');
     sub.classList.remove('show');
-    setTimeout(() => sub.style.display='none', 400);
-    document.getElementById('btnH').className = 'sub-btn';
-    document.getElementById('btnL').className = 'sub-btn';
-    svc = 'disney';
+    setTimeout(()=>sub.style.display='none',400);
+    document.getElementById('bH').className='nsub-btn';
+    document.getElementById('bL').className='nsub-btn';
+    svc='disney';
     show(['fdiv','frow','btnGo']);
-    setTimeout(() => document.getElementById('emailIn').focus(), 350);
+    setTimeout(()=>document.getElementById('emailIn').focus(),350);
   }
   setStep(2);
 }
 
-function pickNetflixType(t) {
-  svc = t;
-  document.getElementById('btnH').className = 'sub-btn' + (t==='netflix_hogar'?' sel':'');
-  document.getElementById('btnL').className = 'sub-btn' + (t==='netflix_login'?' sel':'');
+function pickNT(t){
+  svc=t;
+  document.getElementById('bH').className='nsub-btn'+(t==='nh'?' sel':'');
+  document.getElementById('bL').className='nsub-btn'+(t==='nl'?' sel':'');
+  clearEmailErr(); clearErr();
   show(['fdiv','frow','btnGo']);
-  setTimeout(() => document.getElementById('emailIn').focus(), 200);
+  setTimeout(()=>document.getElementById('emailIn').focus(),200);
 }
 
-function show(ids) {
-  setTimeout(() => ids.forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.add('show');
-  }), 80);
-}
-function hide(ids) {
-  ids.forEach(id => document.getElementById(id).classList.remove('show'));
-}
+/* ─── Submit ─── */
+async function doSubmit(){
+  const email=document.getElementById('emailIn').value.trim();
 
-function setStep(n) {
-  for (let i=1;i<=3;i++) {
-    const num = document.getElementById('sn'+i);
-    const lbl = document.getElementById('sl'+i);
-    if (i<n)      { num.className='step-num done';   num.textContent='✓'; lbl.className='step-label'; }
-    else if(i===n){ num.className='step-num active'; num.textContent=i;   lbl.className='step-label active'; }
-    else          { num.className='step-num';        num.textContent=i;   lbl.className='step-label'; }
+  if(!svc){ showErr('👆 Elige el tipo de código primero.'); return; }
+  if(!email||!email.includes('@')){ showErr('📧 Ingresa un correo válido.'); return; }
+
+  /* Validate against registered list */
+  if(!emailIsRegistered(email)){
+    showEmailErr();
+    return;
   }
-}
 
-async function doSubmit() {
-  const email = document.getElementById('emailIn').value.trim();
-  if (!svc)                              { showErr('👆 Elige el tipo de código primero.'); return; }
-  if (!email || !email.includes('@'))    { showErr('📧 Ingresa un correo válido.'); return; }
-  clearErr();
+  clearEmailErr(); clearErr();
 
-  const btn = document.getElementById('btnGo');
-  btn.classList.add('loading'); btn.disabled = true;
+  const btn=document.getElementById('btnGo');
+  btn.classList.add('loading'); btn.disabled=true;
 
-  try {
-    const res  = await fetch(`${API}?servicio=${svc}&correo=${encodeURIComponent(email)}`);
+  const map={nh:'netflix_hogar',nl:'netflix_login',disney:'disney'};
+
+  try{
+    const res  = await fetch(`${API}?servicio=${map[svc]}&correo=${encodeURIComponent(email)}`);
     const data = await res.json();
-    if (data.success && data.valor) showResult(data);
-    else showErr('⏳ No se encontró código reciente. Espera el correo o contacta soporte.');
-  } catch {
+
+    if(data.success && data.valor){
+      showResult(data);
+    } else {
+      /* API returned no code — show red email error */
+      showEmailErr();
+    }
+  }catch(err){
     showErr('❌ Error de conexión. Intenta de nuevo.');
-  } finally {
-    btn.classList.remove('loading'); btn.disabled = false;
+  }finally{
+    btn.classList.remove('loading'); btn.disabled=false;
   }
 }
 
-function showResult(data) {
-  document.getElementById('formState').style.display = 'none';
-  const rs = document.getElementById('resultState');
-  rs.style.display = 'flex';
+/* ─── Show result ─── */
+function showResult(data){
+  document.getElementById('formState').style.display='none';
+  const rs=document.getElementById('resultState');
+  rs.style.display='flex';
+  ['sn2','sn3'].forEach(id=>{ const e=document.getElementById(id); e.className='sn done'; e.textContent='✓'; });
+  document.getElementById('sl3').className='sl active';
+  ['boxHogar','boxLogin','boxDisney'].forEach(id=>document.getElementById(id).style.display='none');
 
-  ['sn2','sn3'].forEach(id => {
-    const el = document.getElementById(id);
-    el.className = 'step-num done'; el.textContent = '✓';
-  });
-  document.getElementById('sl3').className = 'step-label active';
-
-  ['boxHogar','boxLogin','boxDisney'].forEach(id => document.getElementById(id).style.display='none');
-
-  if (svc === 'netflix_hogar') {
-    document.getElementById('rTitle').textContent = '¡Tu link está listo!';
-    document.getElementById('rSub').textContent   = 'Abre el link y confirma la actualización de hogar.';
-    document.getElementById('boxHogar').style.display = 'block';
-    document.getElementById('rLink').textContent = data.valor;
-    document.getElementById('rLinkBtn').href      = data.valor;
-  } else if (svc === 'netflix_login') {
-    document.getElementById('rTitle').textContent = '¡Tu código está listo!';
-    document.getElementById('rSub').textContent   = 'Ingresa este código de 4 dígitos en Netflix.';
-    document.getElementById('boxLogin').style.display = 'block';
-    document.getElementById('rCode4').textContent = data.valor;
+  if(svc==='nh'){
+    document.getElementById('rTitle').textContent='¡Tu link está listo!';
+    document.getElementById('rSub').textContent='Abre el link y confirma que eres tú para actualizar el Hogar.';
+    document.getElementById('boxHogar').style.display='block';
+    document.getElementById('rLink').textContent=data.valor;
+    document.getElementById('rBtn').href=data.valor;
+  } else if(svc==='nl'){
+    document.getElementById('rTitle').textContent='¡Tu código está listo!';
+    document.getElementById('rSub').textContent='Ingresa este código de 4 dígitos en Netflix.';
+    document.getElementById('boxLogin').style.display='block';
+    document.getElementById('rCode4').textContent=data.valor;
   } else {
-    document.getElementById('rTitle').textContent = '¡Tu código está listo!';
-    document.getElementById('rSub').textContent   = 'Ingresa este código en Disney+ para verificar tu acceso.';
-    document.getElementById('boxDisney').style.display = 'block';
-    document.getElementById('rCode6').textContent = data.valor;
+    document.getElementById('rTitle').textContent='¡Tu código está listo!';
+    document.getElementById('rSub').textContent='Ingresa este código en Disney+ para verificar tu acceso.';
+    document.getElementById('boxDisney').style.display='block';
+    document.getElementById('rCode6').textContent=data.valor;
   }
 }
 
-function showErr(msg) {
-  const b = document.getElementById('errBox');
-  b.textContent = msg; b.style.display = 'block';
-  setTimeout(() => b.style.display='none', 5000);
-}
-function clearErr() { document.getElementById('errBox').style.display='none'; }
+/* ─── Misc ─── */
+function showErr(msg){ const b=document.getElementById('errBox'); b.textContent=msg; b.style.display='block'; setTimeout(()=>b.style.display='none',5000); }
+function clearErr(){ document.getElementById('errBox').style.display='none'; }
 
-function resetAll() {
-  svc = null; document.body.className = '';
-  document.getElementById('emailIn').value = '';
-  document.getElementById('formState').style.display = 'block';
-  document.getElementById('resultState').style.display = 'none';
-  document.getElementById('cardN').className = 'svc-card svc-netflix';
-  document.getElementById('cardD').className = 'svc-card svc-disney';
-  document.getElementById('btnH').className = 'sub-btn';
-  document.getElementById('btnL').className = 'sub-btn';
-  const sub = document.getElementById('netflixSub');
-  sub.classList.remove('show'); sub.style.display = 'none';
-  hide(['fdiv','frow','btnGo']);
-  setStep(1);
+function resetAll(){
+  svc=null; document.body.className='';
+  document.getElementById('emailIn').value='';
+  document.getElementById('formState').style.display='block';
+  document.getElementById('resultState').style.display='none';
+  document.getElementById('cN').className='svc svc-n';
+  document.getElementById('cD').className='svc svc-d';
+  document.getElementById('bH').className='nsub-btn';
+  document.getElementById('bL').className='nsub-btn';
+  document.getElementById('cico').textContent='📺';
+  const sub=document.getElementById('nsub'); sub.classList.remove('show'); sub.style.display='none';
+  hide(['fdiv','frow','btnGo']); clearEmailErr(); clearErr(); setStep(1);
 }
 
-document.getElementById('emailIn').addEventListener('keydown', e => { if(e.key==='Enter') doSubmit(); });
+document.getElementById('emailIn').addEventListener('keydown',e=>{ if(e.key==='Enter') doSubmit(); });
+document.getElementById('emailIn').addEventListener('input',()=>clearEmailErr());
 </script>
 </body>
 </html>
