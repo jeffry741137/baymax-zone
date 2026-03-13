@@ -544,15 +544,17 @@ function pickSvc(svc) {
   if (svc === "n") {
     // activar Netflix
     document.getElementById("cN").classList.add("sel");
-    document.getElementById("nsub").classList.add("show"); // <-- aquí se muestra centrado
+    document.getElementById("nsub").classList.add("show"); 
+    hide(['fdiv','frow','btnGo']); 
+    window.svc = "netflix";   // importante: marcar que es Netflix
   } else if (svc === "d") {
     // activar Disney
     document.getElementById("cD").classList.add("sel");
-    // mostrar correo y botón
-    show(['fdiv','frow','btnGo']);
+    show(['fdiv','frow','btnGo']); 
     setTimeout(() => document.getElementById("emailIn").focus(), 350);
-    svc = "disney";
+    window.svc = "disney";    // marcar que es Disney
   }
+
   setStep(2);
 }
 function pickNT(t){
