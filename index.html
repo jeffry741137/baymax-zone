@@ -138,6 +138,7 @@ body{
   background:linear-gradient(150deg,rgba(18,6,22,.97),rgba(10,3,14,.99));
   border:1px solid var(--bdr2);border-radius:22px;
   padding:36px 34px;overflow:hidden;
+  min-height:320px;
   box-shadow:
     0 0 0 1px rgba(255,255,255,.02) inset,
     0 32px 90px rgba(0,0,0,.75),
@@ -222,8 +223,19 @@ body.sd .cico{background:rgba(26,111,255,.1);border-color:rgba(26,111,255,.3);bo
 }
 
 /* ── NETFLIX SUB ── */
-.nsub{display:none;margin-top:18px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;}
-.nsub.show{opacity:1;transform:translateY(0);}
+.nsub{
+  margin-top:18px;
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-height .45s ease, opacity .4s ease, transform .4s ease;
+  transform:translateY(8px);
+}
+.nsub.show{
+  max-height:300px;
+  opacity:1;
+  transform:translateY(0);
+}
 .nsub-head{
   font-size:10px;font-weight:700;color:var(--red3);letter-spacing:2px;
   text-transform:uppercase;text-align:center;margin-bottom:12px;
@@ -606,12 +618,15 @@ function pickSvc(s){
   $('cico').textContent=s==='n'?'🎬':'🏰';
   clearEE();clearErr();
   if(s==='n'){
-    const sub=$('nsub');sub.style.display='block';requestAnimationFrame(()=>sub.classList.add('show'));
-    hide(['fdiv','frow','btnGo']);svc=null;
+    $('nsub').classList.add('show');
+    hide(['fdiv','frow','btnGo']);
+    svc=null;
   }else{
-    const sub=$('nsub');sub.classList.remove('show');setTimeout(()=>sub.style.display='none',400);
+    $('nsub').classList.remove('show');
     $('bH').className='nsub-btn';$('bL').className='nsub-btn';
-    svc='disney';show(['fdiv','frow','btnGo']);setTimeout(()=>$('emailIn').focus(),350);
+    svc='disney';
+    show(['fdiv','frow','btnGo']);
+    setTimeout(()=>$('emailIn').focus(),350);
   }
   setStep(2);
 }
@@ -632,8 +647,14 @@ async function doSubmit(){
   try{
     const res=await fetch(`${API}?servicio=${map[svc]}&correo=${encodeURIComponent(email)}`);
     const data=await res.json();
-    if(data.success&&data.valor)showResult(data);else showEE();
-  }catch{showErr('❌ Error de conexión. Intenta de nuevo.');}
+    if(data.success && data.valor){
+      showResult(data);
+    } else if(data.error){
+      showErr('❌ Error del servidor: '+data.error);
+    } else {
+      showErr('⏳ No se encontró un código reciente. Solicita el código primero y vuelve a intentar.');
+    }
+  }catch(e){showErr('❌ Error de conexión. Intenta de nuevo.');}
   finally{btn.classList.remove('loading');btn.disabled=false;}
 }
 function showResult(d){
@@ -646,7 +667,7 @@ function showResult(d){
   else if(svc==='nl'){$('rTitle').textContent='¡Código Revelado!';$('rSub').textContent='Ingresa este código de 4 dígitos en Netflix.';$('boxLogin').style.display='block';$('rCode4').textContent=d.valor;}
   else{$('rTitle').textContent='¡Código Revelado!';$('rSub').textContent='Ingresa este código en Disney+ para verificar.';$('boxDisney').style.display='block';$('rCode6').textContent=d.valor;}
 }
-function showErr(msg){const b=$('errBox');b.textContent=msg;b.style.display='block';setTimeout(()=>b.style.display='none',5000);}
+function showErr(msg){const b=$('errBox');b.textContent=msg;b.style.display='block';setTimeout(()=>b.style.display='none',7000);}
 function clearErr(){$('errBox').style.display='none';}
 function resetAll(){
   svc=null;document.body.className='';
@@ -656,7 +677,7 @@ function resetAll(){
   $('cN').className='svc svc-n';$('cD').className='svc svc-d';
   $('bH').className='nsub-btn';$('bL').className='nsub-btn';
   $('cico').textContent='📺';
-  const sub=$('nsub');sub.classList.remove('show');sub.style.display='none';
+  const sub=$('nsub');sub.classList.remove('show');
   hide(['fdiv','frow','btnGo']);clearEE();clearErr();setStep(1);
 }
 $('emailIn').addEventListener('keydown',e=>{if(e.key==='Enter')doSubmit();});
