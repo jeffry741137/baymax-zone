@@ -594,6 +594,27 @@ body.svc-disney .btn-submit:hover{box-shadow:0 14px 44px rgba(26,111,255,.58);}
    pero con mensajes de error mejorados
 ══════════════════════════════ */
 const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwi0358Ng_7drTnNovHHRFC9fZCiwvhh1mMGKAXSQMIK-t-OlFPk82ZEgqK2ZuD3kLwpQ/exec';
+
+// ════════════════════════════════════════════════════════════
+
+const CORREOS_NETFLIX = [
+  'jeffryperezhuallasco3@gmail.com',
+  // 'correo2@gmail.com',
+  // 'correo3@gmail.com',
+  // 'correo4@gmail.com',
+  // 'correo5@gmail.com',
+];
+
+const CORREOS_DISNEY = [
+  'jeffryperezhuallasco8@gmail.com',
+  // 'correo2@gmail.com',
+  // 'correo3@gmail.com',
+  // 'correo4@gmail.com',
+  // 'correo5@gmail.com',
+];
+
+// ════════════════════════════════════════════════════════════
+
 document.getElementById('waLink').href  ='https://wa.me/51986165524';
 document.getElementById('mailLink').href='mailto:jeffryperezhuallasco@gmail.com';
 
@@ -649,6 +670,27 @@ async function handleSubmit(){
   const email=$('emailInput').value.trim();
   if(!currentService){showError('👆 Elige el tipo de código primero.');return;}
   if(!email||!email.includes('@')){showError('📧 Ingresa un correo válido.');return;}
+
+  // ── Validación de correos permitidos por servicio ──
+  const esNetflix = currentService==='netflix_hogar'||currentService==='netflix_login';
+  const esDisney  = currentService==='disney';
+  const emailNorm = email.toLowerCase().trim();
+
+  if(esNetflix && CORREOS_NETFLIX.length>0){
+    const permitidos = CORREOS_NETFLIX.map(c=>c.toLowerCase().trim());
+    if(!permitidos.includes(emailNorm)){
+      showErrorServicio('Netflix');
+      return;
+    }
+  }
+  if(esDisney && CORREOS_DISNEY.length>0){
+    const permitidos = CORREOS_DISNEY.map(c=>c.toLowerCase().trim());
+    if(!permitidos.includes(emailNorm)){
+      showErrorServicio('Disney+');
+      return;
+    }
+  }
+
   hideError();
   const btn=$('btnSubmit');btn.classList.add('loading');btn.disabled=true;
   try{
@@ -693,11 +735,30 @@ function showResult(data){
   }
 }
 
+function showErrorServicio(servicio){
+  const b=$('errorBox');
+  b.innerHTML=`<span style="font-size:16px">⛔</span> Este correo no está registrado para <strong>${servicio}</strong>.<br><small style="font-weight:600;opacity:.8">Verifica que sea el correo correcto o contacta soporte.</small>`;
+  b.style.display='block';
+  // Resaltar input en rojo
+  const inp=$('emailInput');
+  inp.style.borderColor='#cc1818';
+  inp.style.boxShadow='0 0 0 4px rgba(204,24,24,0.15)';
+  setTimeout(()=>{
+    b.style.display='none';
+    inp.style.borderColor='';
+    inp.style.boxShadow='';
+  },8000);
+}
 function showError(msg){
   const b=$('errorBox');b.textContent=msg;b.style.display='block';
   setTimeout(()=>b.style.display='none',7000);
 }
-function hideError(){$('errorBox').style.display='none';}
+function hideError(){
+  $('errorBox').style.display='none';
+  const inp=$('emailInput');
+  inp.style.borderColor='';
+  inp.style.boxShadow='';
+}
 
 function resetForm(){
   currentService=null;document.body.className='';
